@@ -1,0 +1,35 @@
+<p>users</p>
+
+@if (userCarts.length) {
+  <table>
+    <thead>
+    <tr>
+      <th>Username</th>
+      <th>Last cart date</th>
+      <th>Total purchase amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    @for (user of userCarts; track $index) {
+        <tr (click)="goToUser(user.id)">
+          <td>{{ user.name.firstname }} {{ user.name.lastname }}</td>
+          <td>{{ user.lastPurchaseDate | date: 'medium' }}</td>
+          <td>{{ user.totalAmount | currency }}</td>
+        </tr>
+    }
+    </tbody>
+  </table>
+} @else {
+  <mat-spinner color="primary" diameter="40" strokeWidth="2"></mat-spinner>
+}
+
+{{role}}
+
+
+
+
+
+
+
+
+
