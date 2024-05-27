@@ -26,6 +26,7 @@ export class AddUserDialogComponent {
     private router: Router,
     @Inject(DIALOG_DATA) public data: User
   ) {
+    // TODO change to FormGroup
     this.firstFormGroup = this.fb.group({
       firstname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       lastname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
