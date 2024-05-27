@@ -1,0 +1,62 @@
+<app-header></app-header>
+@if (user$ | async; as user) {
+  <div class="user-detail-container">
+    <button class="back-button" mat-stroked-button (click)="goBack()">Back</button>
+    <div class="profile-header">
+      <img src="{{ user.image ? user.image : './assets/default.svg' }}" class="profile-image" alt="{{ user.name.firstname }} {{ user.name.lastname }}">
+      <div class="profile-info">
+        <h1>{{ user.name.firstname | titlecase }} {{ user.name.lastname | titlecase }}</h1>
+        <p>Email: {{ user.email }}</p>
+        <p>Username: {{ user.username }}</p>
+        <p>Phone: {{ user.phone }}</p>
+      </div>
+    </div>
+
+    <div class="purchases-section">
+      <h4>Purchases</h4>
+      @if (userCarts$ | async; as userCarts) {
+        @for (cart of userCarts; track $index) {
+          <div class="cart-container">
+            <h5>{{ cart.date | date: 'fullDate' }}</h5>
+            <div class="cart-card">
+              <table>
+                <thead>
+                <tr>
+                  <th>Product name</th>
+                  <th>ID</th>
+                  <th>Cost</th>
+                  <th>Amount</th>
+                  <th>Total sum</th>
+                </tr>
+                </thead>
+                <tbody>
+                  @for (cartProduct of cart.products; track $index) {
+                    @if (products$ | async; as products) {
+                      @for (product of products; track $index) {
+                        @if (product.id === cartProduct.productId) {
+                          <tr>
+                            <td>{{ product.title }}</td>
+                            <td>{{ product.id }}</td>
+                            <td>{{ product.price | currency:'$' }}</td>
+                            <td class="quantity-control">
+                              <button mat-icon-button (click)="updateQuantity(cart.id, product.id, cartProduct.quantity - 1)" [disabled]="cartProduct.quantity <= 1">-</button>
+                              <span>{{ cartProduct.quantity }}</span>
+                              <button mat-icon-button (click)="updateQuantity(cart.id, product.id, cartProduct.quantity + 1)">+</button>
+                            </td>
+                            <td>{{ (product.price * cartProduct.quantity) | currency:'$' }}</td>
+                          </tr>
+                        }
+                      }
+                    }
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        } @empty {
+          <p>No purchases</p>
+        }
+      }
+    </div>
+  </div>
+}

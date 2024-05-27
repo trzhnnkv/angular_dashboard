@@ -1,22 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from "./pages/login-page/components/login-page.component";
-import {AuthGuard} from "./shared/guards/auth.guard";
-import {DashboardComponent} from "./pages/dashboard/components/dashboard/dashboard.component";
-import {HeaderLayoutComponent} from "./shared/layouts/header-layout/header-layout.component";
-import {UserDetailedComponent} from "./pages/user-detailed/user-detailed.component";
+import { LoginComponent } from "./components/login/login.component";
+import { DashboardComponent } from "./components/dashboard/dashboard.component";
+import { AuthGuard } from "./shared/auth.guard";
+import { UserDetailsComponent } from "./components/dashboard/user-detailed/user-detailed.component";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  {
-    path: '',
-    component: HeaderLayoutComponent,
-    canActivate: [AuthGuard],
-    children: [
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'user/:id', component: UserDetailedComponent }
-    ]
-  },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  { path: 'user/:id', component: UserDetailsComponent, canActivate: [AuthGuard]},
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/dashboard' }
 ];
 

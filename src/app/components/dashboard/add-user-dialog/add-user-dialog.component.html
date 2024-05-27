@@ -1,0 +1,94 @@
+<div class="stepper-container">
+  <button class="close-btn" mat-icon-button (click)="dialogRef.close()">
+    <mat-icon>close</mat-icon>
+  </button>
+  <mat-stepper linear>
+    <mat-step [stepControl]="firstFormGroup">
+      <div class="step-label">
+        <ng-template matStepLabel>Information</ng-template>
+      </div>
+      <form [formGroup]="firstFormGroup">
+        <mat-form-field appearance="fill">
+          <mat-label>First name</mat-label>
+          <input matInput id="firstname" formControlName="firstname" placeholder="John" required>
+          @if (firstFormGroup.get('firstname')?.hasError('required')) {
+            <mat-error>First name is required</mat-error>
+          }
+          @if (firstFormGroup.get('firstname')?.hasError('minlength')) {
+            <mat-error>First name must be at least 2 characters long</mat-error>
+          }
+          @if (firstFormGroup.get('firstname')?.hasError('maxlength')) {
+            <mat-error>First name cannot be more than 50 characters long</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Last name</mat-label>
+          <input matInput id="lastname" formControlName="lastname" placeholder="Baker" required>
+          @if (firstFormGroup.get('lastname')?.hasError('required')) {
+            <mat-error>Last name is required</mat-error>
+          }
+          @if (firstFormGroup.get('lastname')?.hasError('minlength')) {
+            <mat-error>Last name must be at least 2 characters long</mat-error>
+          }
+          @if (firstFormGroup.get('lastname')?.hasError('maxlength')) {
+            <mat-error>Last name cannot be more than 50 characters long</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Username</mat-label>
+          <input matInput id="username" formControlName="username" placeholder="Username" required>
+          @if (firstFormGroup.get('username')?.hasError('required')) {
+            <mat-error>Username is required</mat-error>
+          }
+          @if (firstFormGroup.get('username')?.hasError('minlength')) {
+            <mat-error>Username must be at least 4 characters long</mat-error>
+          }
+          @if (firstFormGroup.get('username')?.hasError('maxlength')) {
+            <mat-error>Username cannot be more than 20 characters long</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput id="email" formControlName="email" placeholder="example@gmail.com" required>
+          @if (firstFormGroup.get('email')?.hasError('required')) {
+            <mat-error>Email is required</mat-error>
+          }
+          @if (firstFormGroup.get('email')?.hasError('email')) {
+            <mat-error>Invalid email</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Phone</mat-label>
+          <input matInput id="phone" formControlName="phone" placeholder="+89432343456" required>
+          @if (firstFormGroup.get('phone')?.hasError('required')) {
+            <mat-error>Phone number is required</mat-error>
+          }
+          @if (firstFormGroup.get('phone')?.hasError('pattern')) {
+            <mat-error>Invalid phone number format</mat-error>
+          }
+        </mat-form-field>
+        <div class="buttons">
+          <button mat-stroked-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <div class="step-label">
+        <ng-template matStepLabel>Image</ng-template>
+      </div>
+      <form [formGroup]="secondFormGroup" (ngSubmit)="add()">
+        <div class="drag-drop-area" (drop)="onFileDropped($event)" (dragover)="onDragOver($event)">
+          <p>Drag and drop an image here, or click to select a file</p>
+          @if (imgPath) {
+            <img [src]="imgPath" alt="User Avatar" class="user-avatar">
+          }
+          <input type="file" (change)="onFileSelected($event)" accept="image/*">
+        </div>
+        <div class="buttons">
+          <button mat-stroked-button matStepperPrevious>Back</button>
+          <button mat-stroked-button type="submit" [disabled]="firstFormGroup.invalid">Add User</button>
+        </div>
+      </form>
+    </mat-step>
+  </mat-stepper>
+</div>

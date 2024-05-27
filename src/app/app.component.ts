@@ -1,17 +1,21 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthService} from "./shared/services/auth.service";
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { LoadCarts, LoadProducts, LoadUsers } from './shared/app.state';
 
 @Component({
   selector: 'app-root',
-  template: '<router-outlet></router-outlet>',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
-  constructor(private auth: AuthService) {}
+export class AppComponent implements OnInit {
 
-  ngOnInit(): void {
-    const potentialToken = localStorage.getItem('token');
-    if (potentialToken !== '') {
-      this.auth.setToken(potentialToken);
-    }
-   }
+  constructor(private store: Store) {}
+
+  ngOnInit() {
+    setTimeout(() => {
+      this.store.dispatch(new LoadUsers());
+      this.store.dispatch(new LoadCarts());
+      this.store.dispatch(new LoadProducts());
+    }, 2000)
+  }
 }

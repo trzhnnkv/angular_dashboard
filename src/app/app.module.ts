@@ -1,57 +1,52 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgxsModule} from '@ngxs/store';
+import {NgxsLoggerPluginModule} from '@ngxs/logger-plugin';
+import {UserState, ProductState, CartState} from "./shared/app.state";
+import {AppComponent} from "./app.component";
+import {HttpClientModule} from "@angular/common/http";
+import {RouterLink, RouterOutlet} from "@angular/router";
+import {AppRoutingModule} from "./app-routing.module";
+import {LoginComponent} from './components/login/login.component';
+import {DashboardComponent} from './components/dashboard/dashboard.component';
+import {UsersComponent} from "./components/dashboard/users/users.component";
+import {StatisticsComponent} from './components/dashboard/statistics/statistics.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {UserDetailsComponent} from './components/dashboard/user-detailed/user-detailed.component';
+import {CanvasJSAngularChartsModule} from "@canvasjs/angular-charts";
+import {AddUserDialogComponent} from "./components/dashboard/add-user-dialog/add-user-dialog.component";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {HeaderComponent} from './shared/header/header.component';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { MaterialModule } from './material/material.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LoginComponent } from './pages/login-page/components/login-page.component';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { AuthService } from './shared/services/auth.service';
-import { AuthGuard } from './shared/guards/auth.guard';
-import { TokenInterceptor } from './shared/interceptors/token.interceptor';
-import { DashboardModule } from './pages/dashboard/dashboard.module';
-import { HeaderLayoutComponent } from './shared/layouts/header-layout/header-layout.component';
-import { HttpClientInMemoryWebApiModule } from "angular-in-memory-web-api";
-import { MockDataService } from "./shared/services/mock-data.service";
-import { UserDetailedComponent } from './pages/user-detailed/user-detailed.component';
-import { NgxsModule } from '@ngxs/store';
-import { AuthState} from "./shared/state/auth.state";
+import {MaterialModule} from "./material/material.module";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HeaderLayoutComponent,
-    UserDetailedComponent,
+    DashboardComponent,
+    UsersComponent,
+    StatisticsComponent,
+    UserDetailsComponent,
+    AddUserDialogComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
-    MaterialModule,
-    FormsModule,
-    ReactiveFormsModule,
     HttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(
-      MockDataService, {
-        dataEncapsulation: false,
-        passThruUnknownUrl: true
-      }
-    ),
-    NgxsModule.forRoot([AuthState]),
-    DashboardModule,
+    NgxsModule.forRoot([UserState, ProductState, CartState]),
+    NgxsLoggerPluginModule.forRoot(),
+    RouterOutlet,
+    RouterLink,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    CanvasJSAngularChartsModule,
+    MaterialModule,
+
   ],
-  providers: [
-    AuthService,
-    AuthGuard,
-    {
-      provide: HTTP_INTERCEPTORS,
-      multi: true,
-      useClass: TokenInterceptor,
-    }
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -1,9 +1,0 @@
-@if (users$ | async; as user) {
-  <p>
-    {{user.name.firstname}}
-  </p>
-  <button type="button" (click)="goBack()">Back</button>
-} @else {
-  <mat-spinner color="primary" diameter="40" strokeWidth="2"></mat-spinner>
-}
-

@@ -3,17 +3,35 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "rxjs-test": {
+    "Dashboard": {
       "projectType": "application",
       "schematics": {
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
         "@schematics/angular:component": {
+          "skipTests": true,
           "standalone": false
         },
         "@schematics/angular:directive": {
+          "skipTests": true,
           "standalone": false
         },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        },
+        "@schematics/angular:interceptor": {
+          "skipTests": true
+        },
         "@schematics/angular:pipe": {
+          "skipTests": true,
           "standalone": false
+        },
+        "@schematics/angular:resolver": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
         }
       },
       "root": "",
@@ -23,7 +41,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/rxjs-test",
+            "outputPath": "dist/dashboard",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -68,10 +86,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "rxjs-test:build:production"
+              "buildTarget": "Dashboard:build:production"
             },
             "development": {
-              "buildTarget": "rxjs-test:build:development"
+              "buildTarget": "Dashboard:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -79,7 +97,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "rxjs-test:build"
+            "buildTarget": "Dashboard:build"
           }
         },
         "test": {

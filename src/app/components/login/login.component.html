@@ -1,0 +1,30 @@
+<div class="login-container">
+  <h2>Welcome!</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username" type="text" minlength="3" maxlength="20"/>
+      <mat-hint align="end">{{ username?.value?.length ?? 0 }}/15</mat-hint>
+      @if (username?.hasError('required')) {
+        <mat-error>Username is required</mat-error>
+      } @else if (username?.hasError('minlength')) {
+        <mat-error>Minimum 3 characters required</mat-error>
+      } @else if (username?.hasError('maxlength')) {
+        <mat-error>Maximum 15 characters allowed</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" type="password" minLength="" maxlength="25"/>
+      <mat-hint align="end">{{ password?.value?.length ?? 0 }}/20</mat-hint>
+      @if (password?.hasError('required')) {
+        <mat-error>Username is required</mat-error>
+      } @else if (password?.hasError('minlength')) {
+        <mat-error>Minimum 3 characters required</mat-error>
+      } @else if (password?.hasError('maxlength')) {
+        <mat-error>Maximum 20 characters allowed</mat-error>
+      }
+    </mat-form-field>
+    <button mat-stroked-button color="primary" type="submit">Login</button>
+  </form>
+</div>
