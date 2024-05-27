@@ -18,6 +18,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   loading: boolean = true;
   filterValue: string = '';
 
+  // TODO Не очень понятное название. Как будто бы это функция.
   @Select(UserState.getUsers) usersLoaded$: Observable<User[]>;
   @Select(CartState.getCarts) cartsLoaded$: Observable<Cart[]>;
   @Select(ProductState.getProducts) productsLoaded$: Observable<Product[]>;
@@ -39,6 +40,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userRole = this.authService.getUserRole();
     this.loadData();
+    // TODO check takeUntilDestroyed
     combineLatest([this.usersLoaded$, this.cartsLoaded$, this.productsLoaded$]).pipe(
       map(([usersLoaded, cartsLoaded, productsLoaded]) => usersLoaded.length > 0 && cartsLoaded.length > 0 && productsLoaded.length > 0),
     ).subscribe(allLoaded => {
@@ -56,6 +58,7 @@ export class UsersComponent implements OnInit, OnDestroy {
         return users.map(user => {
           const userCarts = carts.filter(cart => cart.userId === user.id);
           const lastPurchaseDate = userCarts.length ? userCarts[userCarts.length - 1].date : 'No purchases yet';
+          // TODO Refactor to only reduce
           const totalPurchases = userCarts.map(cart =>
             cart.products.map(cartProduct => {
               const product = products.find(p => p.id === cartProduct.productId);
@@ -87,10 +90,12 @@ export class UsersComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // TODO в идеале вынести это в pipe
     this.sortedUsersWithDetails = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'name':
+          // TODO add name sorting. (check localCompare)
           return compare(a.name.firstname, b.name.firstname, isAsc);
         case 'date':
           return compareDates(a.lastPurchaseDate, b.lastPurchaseDate, isAsc);
@@ -106,6 +111,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     if (event) {
       this.filterValue = (event.target as HTMLInputElement).value.toLowerCase();
     }
+    // TODO вынести в pipe
     this.sortedUsersWithDetails = this.originalUsersWithDetails.filter(user => {
       const fullName = `${user.name.firstname} ${user.name.lastname}`.toLowerCase();
       const lastPurchaseDate = user.lastPurchaseDate !== 'No purchases yet' ? new Date(user.lastPurchaseDate).toLocaleDateString().toLowerCase() : 'no purchases yet';
@@ -127,6 +133,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 }
 
 function compare(a: number | string, b: number | string, isAsc: boolean) {
+  // TODO Change to more readable
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
 

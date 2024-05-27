@@ -21,6 +21,7 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       const {username, password} = this.loginForm.value;
+      // TODO subscribe с двумя аргументами устарел. Посмотреть как делать с объектом
       this.authService.login(username, password).subscribe(
         () => {
         },
@@ -37,10 +38,12 @@ export class LoginComponent {
     }
   }
 
+  // TODO add typo
   get username() {
     return this.loginForm.get('username');
   }
 
+  // TODO add typo
   get password() {
     return this.loginForm.get('password');
   }

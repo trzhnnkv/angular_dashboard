@@ -34,9 +34,11 @@ export class AddUserDialogComponent {
       phone: ['', [Validators.required, Validators.pattern(/^\+\d{11}$/)]]
     });
 
+    // TODO can be removed
     this.secondFormGroup = this.fb.group({});
   }
 
+  // TODO эта функция и функция ниже на 90% одинаковые
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -111,6 +113,7 @@ export class AddUserDialogComponent {
     this.store.dispatch(new AddUser(newUser)).subscribe(
       (state) => {
         const addedUser = state.user.users[state.user.users.length - 1];
+        // TODO isLoading can be refactor to finalize pipe
         this.isLoading = false;
         this.dialogRef.close();
         this.snackBar.open('User added successfully', 'Close', {

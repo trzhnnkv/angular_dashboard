@@ -3,10 +3,12 @@ import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {tap} from 'rxjs/operators';
 
+// TODO Сервисы лучше выносить в папку core/services
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  // TODO Move to environments (check angular cli environments)
   private baseUrl = 'https://fakestoreapi.com';
 
   constructor(private http: HttpClient, private router: Router) {
