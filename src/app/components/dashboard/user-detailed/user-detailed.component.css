@@ -1,0 +1,96 @@
+.back-button {
+  margin-top: 20px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-right: 20px;
+  object-fit: cover;
+  background-color: #e0e0e0;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-info h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.profile-info p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.purchases-section {
+  margin-top: 30px;
+}
+
+.purchases-section h4 {
+  text-align: center;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  font-size: 18px;
+  color: #333;
+}
+
+.purchases-section h5 {
+  margin-bottom: 10px;
+  margin-left: 20px;
+  color: #333;
+}
+
+.cart-container {
+  margin-bottom: 40px;
+}
+
+.cart-card {
+  padding: 30px;
+  margin-bottom: 40px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.cart-container:last-child .cart-card {
+  margin-bottom: 0;
+}
+
+.cart-card h5 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-control button {
+  margin: 0 5px;
+}
+
+.quantity-control span {
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+button {
+  display: block;
+  margin: 0 0 0 auto;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+

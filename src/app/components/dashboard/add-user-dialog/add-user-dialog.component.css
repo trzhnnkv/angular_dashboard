@@ -1,0 +1,77 @@
+.stepper-container {
+  padding: 10px;
+  height: calc(100vh - 50px);
+  overflow-y: auto;
+}
+
+.close-btn {
+  display: block;
+  margin: 24px 24px 24px auto;
+}
+
+.step-label {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.mat-form-field {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.mat-form-field input {
+  border-radius: 25px;
+  background: #f0f0f0;
+}
+
+.drag-drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  color: #999;
+  margin-bottom: 20px;
+  cursor: pointer;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.drag-drop-area p {
+  margin: 0;
+  color: #555;
+}
+
+.drag-drop-area img.user-avatar {
+  margin-top: 20px;
+  border-radius: 8px;
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  background-color: #e0e0e0;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: flex-end;
+}

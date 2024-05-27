@@ -1,0 +1,36 @@
+<div class="users-container">
+  @if (loading) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  } @else {
+    <input type="text" placeholder="Filter..." (input)="applyFilter($event)" class="search-input"/>
+    <table matSort (matSortChange)="sortData($event)">
+      <thead>
+      <tr>
+        <th mat-sort-header="name">Name</th>
+        <th mat-sort-header="date">Last Purchase Date</th>
+        <th mat-sort-header="total">Total Purchases ($)</th>
+      </tr>
+      </thead>
+      <tbody>
+        @if (sortedUsersWithDetails.length) {
+          @for (user of sortedUsersWithDetails; track user) {
+            <tr (click)="navigateToDetails(user.id)">
+              <td>{{ ((user.name.firstname + ' ' + user.name.lastname).length >= 20 ? (user.name.firstname + ' ' + user.name.lastname).slice(0, 20) + '...' : user.name.firstname + ' ' + user.name.lastname) | titlecase }}</td>
+              <td>{{ user.lastPurchaseDate !== 'No purchases yet' ? (user.lastPurchaseDate | date: 'fullDate') : user.lastPurchaseDate }}</td>
+              <td>{{ user.totalPurchases | currency }}</td>
+            </tr>
+          }
+        } @else {
+          <tr>
+            <td colspan="3">
+              <mat-error>No data</mat-error>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    @if(userRole === 'admin') {
+      <button mat-stroked-button (click)="openAddUserDialog()">Add User</button>
+    }
+  }
+</div>
