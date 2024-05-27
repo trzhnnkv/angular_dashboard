@@ -96,7 +96,8 @@ export class AddUserDialogComponent {
 
     this.isLoading = true;
 
-    const newUser: Partial<User> = {
+    const newUser: User = {
+      id: 0, // Temporary ID, will be set by the state
       name: {
         firstname: this.firstFormGroup.value.firstname,
         lastname: this.firstFormGroup.value.lastname,
@@ -104,7 +105,7 @@ export class AddUserDialogComponent {
       username: this.firstFormGroup.value.username,
       email: this.firstFormGroup.value.email,
       phone: this.firstFormGroup.value.phone,
-      image: this.imgPath
+      image: this.imgPath || ''
     };
 
     this.store.dispatch(new AddUser(newUser)).subscribe(

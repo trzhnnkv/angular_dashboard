@@ -1,7 +1,12 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Select, Store} from '@ngxs/store';
+import {Select} from '@ngxs/store';
 import {Observable, Subscription} from 'rxjs';
-import {CartState, ProductState, UserState} from '../../../shared/app.state';
+import {Cart, CartState, Product, ProductState, User, UserState} from '../../../shared/app.state';
+
+interface ChartData {
+  label: string;
+  y: number;
+}
 
 @Component({
   selector: 'app-statistics',
@@ -9,19 +14,17 @@ import {CartState, ProductState, UserState} from '../../../shared/app.state';
   styleUrls: ['./statistics.component.css']
 })
 export class StatisticsComponent implements OnInit, OnDestroy {
-  show: boolean = false;
-  @Select(CartState.getCarts) carts$: Observable<any[]>;
-  @Select(ProductState.getProducts) products$: Observable<any[]>;
-  @Select(UserState.getUsers) users$: Observable<any[]>;
+  @Select(CartState.getCarts) carts$: Observable<Cart[]>;
+  @Select(ProductState.getProducts) products$: Observable<Product[]>;
+  @Select(UserState.getUsers) users$: Observable<User[]>;
 
-  productsData: any[] = [];
-  usersData: any[] = [];
-  activeUsersData: any[] = [];
+  productsData: ChartData[] = [];
+  usersData: ChartData[] = [];
+  activeUsersData: ChartData[] = [];
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private store: Store) {
-  }
+  constructor() {}
 
   ngOnInit() {
     this.loadData();
@@ -46,8 +49,8 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     this.subscriptions.push(cartsSub);
   }
 
-  generateProductsData(carts, products) {
-    const productCounts = {};
+  generateProductsData(carts: Cart[], products: Product[]) {
+    const productCounts: { [key: number]: number } = {};
     carts.forEach(cart => {
       cart.products.forEach(product => {
         if (productCounts[product.productId]) {
@@ -64,7 +67,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     }));
   }
 
-  generateUsersData(users, carts, products) {
+  generateUsersData(users: User[], carts: Cart[], products: Product[]) {
     this.usersData = users.map(user => {
       let totalPurchases = 0;
 
@@ -86,7 +89,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     });
   }
 
-  generateActiveUsersData(carts) {
+  generateActiveUsersData(carts: Cart[]) {
     const startDate = new Date('2020-03-02T00:00:00.000Z');
     const dates = [...Array(7).keys()].map(i => {
       const date = new Date(startDate);
@@ -95,7 +98,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     });
 
     const activeUsers = dates.map(date => {
-      const usersForDate = new Set();
+      const usersForDate = new Set<number>();
       carts.forEach(cart => {
         if (cart.date.split('T')[0] === date) {
           usersForDate.add(cart.userId);

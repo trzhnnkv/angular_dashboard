@@ -2,9 +2,10 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from "@ngxs/store";
 import {
-  CartState,
+  Cart,
+  CartState, Product,
   ProductState,
-  UpdateProductQuantity,
+  UpdateProductQuantity, User,
   UserState,
 } from "../../../shared/app.state";
 import {Observable, Subscription} from "rxjs";
@@ -17,12 +18,10 @@ import {map} from "rxjs/operators";
 })
 export class UserDetailsComponent implements OnInit, OnDestroy {
   userId: number;
-  user$: Observable<any>;
-  userCarts$: Observable<any[]>;
-  products$: Observable<any[]>;
-  selectedProductId: number;
+  user$: Observable<User>;
+  userCarts$: Observable<Cart[]>;
+  products$: Observable<Product[]>;
   quantity: number = 1;
-  selectedDate: Date;
   private subscription: Subscription = new Subscription();
 
   constructor(private store: Store,

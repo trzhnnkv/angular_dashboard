@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {Select} from '@ngxs/store';
 import {Observable, combineLatest, Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {UserState, CartState, ProductState, User, Cart, Product} from '../../../shared/app.state';
+import {UserState, CartState, ProductState, User, Cart, Product, UserWithDetails} from '../../../shared/app.state';
 import {AddUserDialogComponent} from "../add-user-dialog/add-user-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
@@ -22,9 +22,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   @Select(CartState.getCarts) cartsLoaded$: Observable<Cart[]>;
   @Select(ProductState.getProducts) productsLoaded$: Observable<Product[]>;
 
-  usersWithDetails$: Observable<any[]>;
-  sortedUsersWithDetails: any[] = [];
-  originalUsersWithDetails: any[] = [];
+  usersWithDetails$: Observable<UserWithDetails[]>;
+  sortedUsersWithDetails: UserWithDetails[] = [];
+  originalUsersWithDetails: UserWithDetails[] = [];
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -130,8 +130,9 @@ function compare(a: number | string, b: number | string, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
 
-function compareDates(a: string, b: string, isAsc: boolean) {
-  const dateA = a === 'No purchases yet' ? new Date(0) : new Date(a);
-  const dateB = b === 'No purchases yet' ? new Date(0) : new Date(b);
+function compareDates(a: string | Date, b: string | Date, isAsc: boolean) {
+  const dateA = a instanceof Date ? a : new Date(a);
+  const dateB = b instanceof Date ? b : new Date(b);
   return (dateA < dateB ? -1 : 1) * (isAsc ? 1 : -1);
 }
+

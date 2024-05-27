@@ -10,7 +10,7 @@ export class LoadUsers {
 export class AddUser {
   static readonly type = '[User] Add User';
 
-  constructor(public user: Partial<User>) {
+  constructor(public user: User) {
   }
 }
 
@@ -41,6 +41,11 @@ export interface User {
   image?: string;
 }
 
+export interface UserWithDetails extends User {
+  lastPurchaseDate: string | Date;
+  totalPurchases: number;
+}
+
 export interface CartProduct {
   productId: number;
   quantity: number;
@@ -61,17 +66,17 @@ export interface Product {
 }
 
 export interface UserStateModel {
-  users: any[];
+  users: User[];
   loaded: boolean;
 }
 
 export interface CartStateModel {
-  carts: any[];
+  carts: Cart[];
   loaded: boolean;
 }
 
 export interface ProductStateModel {
-  products: any[];
+  products: Product[];
   loaded: boolean;
 }
 
@@ -118,7 +123,7 @@ export class UserState {
   @Action(AddUser)
   addUser(ctx: StateContext<UserStateModel>, action: AddUser) {
     const state = ctx.getState();
-    const newUser: Partial<User> = {...action.user, id: this.generateId(state.users)};
+    const newUser: User = {...action.user, id: this.generateId(state.users)};
     const updatedUsers = [...state.users, newUser];
     ctx.patchState({users: updatedUsers});
     return updatedUsers;
@@ -187,7 +192,6 @@ export class CartState {
   }
 }
 
-
 @State<ProductStateModel>({
   name: 'product',
   defaults: {
@@ -223,4 +227,3 @@ export class ProductState {
     );
   }
 }
-
