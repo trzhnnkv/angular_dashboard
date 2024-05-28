@@ -21,12 +21,12 @@ export class UserState {
   }
 
   @Selector()
-  static getUsers(state: UserStateModel) {
+  static users(state: UserStateModel) {
     return state.users;
   }
 
   @Selector()
-  static getUserById(state: UserStateModel) {
+  static userById(state: UserStateModel) {
     return (userId: number) => state.users.find(user => user.id === userId);
   }
 

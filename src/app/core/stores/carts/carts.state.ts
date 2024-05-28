@@ -20,12 +20,12 @@ export class CartState {
   constructor(private apiService: ApiService) {}
 
   @Selector()
-  static getCarts(state: CartStateModel) {
+  static carts(state: CartStateModel) {
     return state.carts;
   }
 
   @Selector()
-  static getCartsByUserId(state: CartStateModel) {
+  static cartsByUserId(state: CartStateModel) {
     return (userId: number) => state.carts.filter(cart => cart.userId === userId);
   }
 

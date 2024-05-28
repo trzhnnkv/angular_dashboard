@@ -32,9 +32,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.route.params.subscribe(params => {
         this.userId = +params['id'];
-        this.user$ = this.store.select(UserState.getUserById).pipe(map(selector => selector(this.userId)));
-        this.userCarts$ = this.store.select(CartState.getCartsByUserId).pipe(map(selector => selector(this.userId)));
-        this.products$ = this.store.select(ProductState.getProducts);
+        this.user$ = this.store.select(UserState.userById).pipe(map(selector => selector(this.userId)));
+        this.userCarts$ = this.store.select(CartState.cartsByUserId).pipe(map(selector => selector(this.userId)));
+        this.products$ = this.store.select(ProductState.products);
       })
     );
   }

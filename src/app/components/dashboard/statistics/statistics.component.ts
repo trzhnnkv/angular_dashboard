@@ -20,9 +20,9 @@ interface ChartData {
   styleUrls: ['./statistics.component.css']
 })
 export class StatisticsComponent implements OnInit, OnDestroy {
-  @Select(CartState.getCarts) carts$: Observable<Cart[]>;
-  @Select(ProductState.getProducts) products$: Observable<Product[]>;
-  @Select(UserState.getUsers) users$: Observable<User[]>;
+  @Select(CartState.carts) carts$: Observable<Cart[]>;
+  @Select(ProductState.products) products$: Observable<Product[]>;
+  @Select(UserState.users) users$: Observable<User[]>;
 
   productsData: ChartData[] = [];
   usersData: ChartData[] = [];

@@ -24,9 +24,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   loading: boolean = true;
   filterValue: string = '';
 
-  @Select(UserState.getUsers) users$: Observable<User[]>;
-  @Select(CartState.getCarts) carts$: Observable<Cart[]>;
-  @Select(ProductState.getProducts) products$: Observable<Product[]>;
+  @Select(UserState.users) users$: Observable<User[]>;
+  @Select(CartState.carts) carts$: Observable<Cart[]>;
+  @Select(ProductState.products) products$: Observable<Product[]>;
 
   usersWithDetails$: Observable<UserWithDetails[]>;
   sortedUsersWithDetails: UserWithDetails[] = [];
@@ -90,13 +90,12 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   sortData(sort: Sort) {
-    const data = this.originalUsersWithDetails.slice();
+    const data = this.sortedUsersWithDetails.slice();
     if (!sort.active || sort.direction === '') {
-      this.sortedUsersWithDetails = this.originalUsersWithDetails;
+      this.sortedUsersWithDetails = [...this.originalUsersWithDetails];
       return;
     }
 
-    // TODO в идеале вынести это в pipe
     this.sortedUsersWithDetails = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {

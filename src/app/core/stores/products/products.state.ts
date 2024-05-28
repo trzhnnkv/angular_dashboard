@@ -20,7 +20,7 @@ export class ProductState {
   constructor(private apiService: ApiService) {}
 
   @Selector()
-  static getProducts(state: ProductStateModel) {
+  static products(state: ProductStateModel) {
     return state.products;
   }
 
