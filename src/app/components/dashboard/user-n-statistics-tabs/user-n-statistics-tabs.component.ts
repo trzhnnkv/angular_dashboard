@@ -4,7 +4,6 @@ import {MatTabChangeEvent} from "@angular/material/tabs";
 @Component({
   selector: 'app-user-n-statistics-tabs',
   templateUrl: './user-n-statistics-tabs.component.html',
-  styleUrl: './user-n-statistics-tabs.component.css'
 })
 export class UserNStatisticsTabsComponent {
   selectedIndex: number = 0;
