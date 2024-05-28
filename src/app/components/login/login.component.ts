@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {AuthService} from "../../core/services/auth.service";
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
@@ -35,13 +35,11 @@ export class LoginComponent {
     }
   }
 
-  // TODO add typo
-  get username() {
+  get username(): AbstractControl<any, any> | null {
     return this.loginForm.get('username');
   }
 
-  // TODO add typo
-  get password() {
+  get password(): AbstractControl<any, any> | null {
     return this.loginForm.get('password');
   }
 }
