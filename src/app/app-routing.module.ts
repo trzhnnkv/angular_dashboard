@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from "./components/login/login.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
-import { AuthGuard } from "./shared/guards/auth.guard";
+import {AuthGuard, AuthGuardChild} from "./shared/guards/auth.guard";
 import { UserDetailsComponent } from "./components/dashboard/user-detailed/user-detailed.component";
 import {
   UserNStatisticsTabsComponent
@@ -10,7 +10,7 @@ import {
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], children: [
+  { path: 'dashboard', component: DashboardComponent, canActivateChild: [AuthGuardChild], canActivate: [AuthGuard], children: [
       { path: 'user/:id', component: UserDetailsComponent },
       { path: '', component: UserNStatisticsTabsComponent, }
     ]},
