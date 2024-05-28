@@ -39,9 +39,9 @@
                             <td>{{ product.id }}</td>
                             <td>{{ product.price | currency:'$' }}</td>
                             <td class="quantity-control">
-                              <button mat-icon-button (click)="updateQuantity(cart.id, product.id, cartProduct.quantity - 1)" [disabled]="cartProduct.quantity <= 1">-</button>
+                              <button mat-icon-button (click)="updateQuantityDecrease(cart.id, product.id, cartProduct.quantity)" [disabled]="cartProduct.quantity <= 1">-</button>
                               <span>{{ cartProduct.quantity }}</span>
-                              <button mat-icon-button (click)="updateQuantity(cart.id, product.id, cartProduct.quantity + 1)">+</button>
+                              <button mat-icon-button (click)="updateQuantityIncrease(cart.id, product.id, cartProduct.quantity)">+</button>
                             </td>
                             <td>{{ (product.price * cartProduct.quantity) | currency:'$' }}</td>
                           </tr>

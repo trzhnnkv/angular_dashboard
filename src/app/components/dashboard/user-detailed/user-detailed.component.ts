@@ -43,11 +43,14 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  // TODO split to 2 functions
-  updateQuantity(cartId: number, productId: number, quantity: number) {
-    if (quantity > 0) {
-      this.store.dispatch(new UpdateProductQuantity(cartId, this.userId, productId, quantity));
+  updateQuantityDecrease(cartId: number, productId: number, quantity: number) {
+    if (quantity > 1) {
+      this.store.dispatch(new UpdateProductQuantity(cartId, this.userId, productId, quantity - 1));
     }
+  }
+
+  updateQuantityIncrease(cartId: number, productId: number, quantity: number) {
+    this.store.dispatch(new UpdateProductQuantity(cartId, this.userId, productId, quantity + 1));
   }
 
   goBack() {
