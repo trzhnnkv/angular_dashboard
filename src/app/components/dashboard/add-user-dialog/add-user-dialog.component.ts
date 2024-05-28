@@ -112,8 +112,8 @@ export class AddUserDialogComponent {
       image: this.imgPath || ''
     };
 
-    this.store.dispatch(new AddUser(newUser)).subscribe(
-      (state) => {
+    this.store.dispatch(new AddUser(newUser)).subscribe({
+      next: (state) => {
         const addedUser = state.user.users[state.user.users.length - 1];
         // TODO isLoading can be refactor to finalize pipe
         this.isLoading = false;
@@ -123,12 +123,12 @@ export class AddUserDialogComponent {
         });
         this.router.navigate(['/user', addedUser.id]);
       },
-      error => {
+      error: () => {
         this.isLoading = false;
         this.snackBar.open('Failed to add user', 'Close', {
           duration: 3000,
         });
       }
-    );
+    });
   }
 }

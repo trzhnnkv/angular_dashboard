@@ -20,17 +20,14 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      const {username, password} = this.loginForm.value;
-      // TODO subscribe с двумя аргументами устарел. Посмотреть как делать с объектом
-      this.authService.login(username, password).subscribe(
-        () => {
-        },
-        error => {
+      const { username, password } = this.loginForm.value;
+      this.authService.login(username, password).subscribe({
+        error: (error) => {
           this.snackBar.open(error.error[0].toUpperCase() + error.error.slice(1), 'Close', {
             duration: 3000,
           });
         }
-      );
+      });
     } else {
       this.snackBar.open('Please correct the errors in the form.', 'Close', {
         duration: 3000,
