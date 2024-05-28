@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Select} from '@ngxs/store';
-import {Observable, Subscription} from 'rxjs';
+import {combineLatest, Observable, Subject, takeUntil} from 'rxjs';
 import {Cart} from "../../../core/interfaces/cart.model";
 import {Product} from "../../../core/interfaces/product.model";
 import {User} from "../../../core/interfaces/user.model";
@@ -27,7 +27,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   usersData: ChartData[] = [];
   activeUsersData: ChartData[] = [];
 
-  private subscriptions: Subscription[] = [];
+  private destroy$ = new Subject<void>();
 
   constructor() {}
 
@@ -36,23 +36,18 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadData() {
-    // TODO combine latest
-    const cartsSub = this.carts$.subscribe(carts => {
-      const productsSub = this.products$.subscribe(products => {
-        const usersSub = this.users$.subscribe(users => {
-          this.generateProductsData(carts, products);
-          this.generateUsersData(users, carts, products);
-          this.generateActiveUsersData(carts);
-        });
-        this.subscriptions.push(usersSub);
-      });
-      this.subscriptions.push(productsSub);
+    combineLatest([this.carts$, this.products$, this.users$]).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(([carts, products, users]) => {
+      this.generateProductsData(carts, products);
+      this.generateUsersData(users, carts, products);
+      this.generateActiveUsersData(carts);
     });
-    this.subscriptions.push(cartsSub);
   }
 
   generateProductsData(carts: Cart[], products: Product[]) {
