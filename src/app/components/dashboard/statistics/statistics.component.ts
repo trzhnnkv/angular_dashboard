@@ -1,10 +1,12 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Select} from '@ngxs/store';
 import {Observable, Subscription} from 'rxjs';
-import {CartState, ProductState, UserState} from '../../../core/stores/app.state';
 import {Cart} from "../../../core/interfaces/cart.model";
 import {Product} from "../../../core/interfaces/product.model";
 import {User} from "../../../core/interfaces/user.model";
+import {CartState} from "../../../core/stores/carts/carts.state";
+import {ProductState} from "../../../core/stores/products/products.state";
+import {UserState} from "../../../core/stores/users/users.state";
 
 interface ChartData {
   label: string;

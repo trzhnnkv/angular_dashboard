@@ -1,11 +1,11 @@
 import {Component, Inject} from '@angular/core';
 import {DialogRef, DIALOG_DATA} from '@angular/cdk/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AddUser} from '../../../core/stores/app.state';
 import {Store} from '@ngxs/store';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {User} from "../../../core/interfaces/user.model";
+import {AddUser} from "../../../core/stores/users/users.actions";
 
 @Component({
   selector: 'app-dialog',
@@ -101,7 +101,7 @@ export class AddUserDialogComponent {
     this.isLoading = true;
 
     const newUser: User = {
-      id: 0, // Temporary ID, will be set by the state
+      id: 0, // Temporary ID, will be set by the users
       name: {
         firstname: this.firstFormGroup.value.firstname,
         lastname: this.firstFormGroup.value.lastname,
