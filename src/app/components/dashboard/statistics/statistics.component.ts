@@ -10,6 +10,7 @@ import {UserState} from "../../../core/stores/users/users.state";
 
 interface ChartData {
   label: string;
+  // y - is a value
   y: number;
 }
 
@@ -64,7 +65,6 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
     this.productsData = products.map(product => ({
       label: product.title.length >= 20 ? product.title.slice(0, 20) + "..." : product.title,
-      // TODO y ;)
       y: productCounts[product.id] || 0
     }));
   }
