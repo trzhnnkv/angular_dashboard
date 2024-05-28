@@ -98,8 +98,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'name':
-          // TODO add name sorting. (check localCompare)
-          return compare(a.name.firstname, b.name.firstname, isAsc);
+          return compareNames(a.name.firstname, b.name.firstname, isAsc);
         case 'date':
           return compareDates(a.lastPurchaseDate, b.lastPurchaseDate, isAsc);
         case 'total':
@@ -136,13 +135,20 @@ export class UsersComponent implements OnInit, OnDestroy {
 }
 
 function compare(a: number | string, b: number | string, isAsc: boolean) {
-  // TODO Change to more readable
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  if (a < b) return isAsc ? -1 : 1;
+  if (a > b) return isAsc ? 1 : -1;
+  return 0;
+}
+
+function compareNames(a: string, b: string, isAsc: boolean) {
+  return a.localeCompare(b) * (isAsc ? 1 : -1);
 }
 
 function compareDates(a: string | Date, b: string | Date, isAsc: boolean) {
-  const dateA = a instanceof Date ? a : new Date(a);
-  const dateB = b instanceof Date ? b : new Date(b);
-  return (dateA < dateB ? -1 : 1) * (isAsc ? 1 : -1);
+  const dateA = a === 'No purchases yet' ? new Date(0) : new Date(a);
+  const dateB = b === 'No purchases yet' ? new Date(0) : new Date(b);
+  if (dateA < dateB) return isAsc ? -1 : 1;
+  if (dateA > dateB) return isAsc ? 1 : -1;
+  return 0;
 }
 
