@@ -1,26 +1,23 @@
 import { Injectable } from '@angular/core';
-import {State, Action, StateContext, Selector} from '@ngxs/store';
-import {LoadCarts, UpdateProductQuantity} from './carts.actions';
-import {Cart} from "../../interfaces/cart.model";
-import {ApiService} from "../../services/api.service";
-import {tap} from "rxjs/operators";
+import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { LoadCarts, UpdateProductQuantity } from './carts.actions';
+import { Cart } from "../../interfaces/cart.model";
+import { ApiService} from "../../services/api.service";
+import { tap } from "rxjs/operators";
 
 export interface CartStateModel {
   carts: Cart[];
-  loaded: boolean;
 }
 
 @State<CartStateModel>({
   name: 'carts',
   defaults: {
-    carts: [],
-    loaded: false
+    carts: []
   }
 })
 @Injectable()
 export class CartState {
-  constructor(private apiService: ApiService) {
-  }
+  constructor(private apiService: ApiService) {}
 
   @Selector()
   static getCarts(state: CartStateModel) {
@@ -32,20 +29,11 @@ export class CartState {
     return (userId: number) => state.carts.filter(cart => cart.userId === userId);
   }
 
-  @Selector()
-  static isLoaded(state: CartStateModel) {
-    return state.loaded;
-  }
-
   @Action(LoadCarts)
   loadCarts(ctx: StateContext<CartStateModel>) {
-    const state = ctx.getState();
-    if (state.loaded) {
-      return;
-    }
     return this.apiService.getCarts().pipe(
       tap((carts) => {
-        ctx.patchState({carts, loaded: true});
+        ctx.patchState({ carts });
       })
     );
   }
@@ -53,18 +41,19 @@ export class CartState {
   @Action(UpdateProductQuantity)
   updateProductQuantity(ctx: StateContext<CartStateModel>, action: UpdateProductQuantity) {
     const state = ctx.getState();
-    // TODO map can be change to users operators
     const carts = state.carts.map(cart => {
+      // TODO map can be change to users operators
       if (cart.id === action.cartId && cart.userId === action.userId) {
         cart.products = cart.products.map(product => {
           if (product.productId === action.productId) {
-            return {...product, quantity: action.quantity};
+            return { ...product, quantity: action.quantity };
           }
           return product;
         });
       }
       return cart;
     });
-    ctx.setState({...state, carts});
+    ctx.setState({ ...state, carts });
   }
 }
+

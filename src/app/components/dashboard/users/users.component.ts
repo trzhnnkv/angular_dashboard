@@ -1,18 +1,19 @@
-import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {Select} from '@ngxs/store';
-import {Observable, combineLatest, takeUntil, Subject} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {AddUserDialogComponent} from "../add-user-dialog/add-user-dialog.component";
-import {MatDialog} from "@angular/material/dialog";
-import {Router} from "@angular/router";
-import {MatSort, Sort} from '@angular/material/sort';
-import {AuthService} from "../../../core/services/auth.service";
-import {User, UserWithDetails} from "../../../core/interfaces/user.model";
-import {Cart} from "../../../core/interfaces/cart.model";
-import {Product} from "../../../core/interfaces/product.model";
-import {UserState} from "../../../core/stores/users/users.state";
-import {CartState} from "../../../core/stores/carts/carts.state";
-import {ProductState} from "../../../core/stores/products/products.state";
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Select, Store } from '@ngxs/store';
+import { Observable, combineLatest, takeUntil, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { AddUserDialogComponent } from "../add-user-dialog/add-user-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
+import { Router } from "@angular/router";
+import { MatSort, Sort } from '@angular/material/sort';
+import { AuthService } from "../../../core/services/auth.service";
+import { User, UserWithDetails } from "../../../core/interfaces/user.model";
+import { Cart } from "../../../core/interfaces/cart.model";
+import { Product } from "../../../core/interfaces/product.model";
+import { UserState } from "../../../core/stores/users/users.state";
+import { CartState } from "../../../core/stores/carts/carts.state";
+import { ProductState } from "../../../core/stores/products/products.state";
+import { LoadUsers } from "../../../core/stores/users/users.actions";
 
 @Component({
   selector: 'app-users',
@@ -38,8 +39,8 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   constructor(public dialog: MatDialog,
               private router: Router,
-              private authService: AuthService) {
-  }
+              private authService: AuthService,
+              private store: Store) {}
 
   ngOnInit() {
     this.userRole = this.authService.getUserRole();
@@ -59,6 +60,8 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
+    this.store.dispatch(new LoadUsers());
+
     this.usersWithDetails$ = combineLatest([this.users$, this.carts$, this.products$]).pipe(
       map(([users, carts, products]) => {
         return users.map(user => {
@@ -151,4 +154,3 @@ function compareDates(a: string | Date, b: string | Date, isAsc: boolean) {
   if (dateA > dateB) return isAsc ? 1 : -1;
   return 0;
 }
-

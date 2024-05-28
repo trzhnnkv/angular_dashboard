@@ -7,15 +7,12 @@ import {tap} from "rxjs/operators";
 
 export interface UserStateModel {
   users: User[];
-  loaded: boolean;
 }
 
 @State<UserStateModel>({
   name: 'user',
   defaults: {
     users: [],
-    // TODO для спинера лучше сделать отдельный сервис.
-    loaded: false
   }
 })
 @Injectable()
@@ -33,21 +30,11 @@ export class UserState {
     return (userId: number) => state.users.find(user => user.id === userId);
   }
 
-  @Selector()
-  static isLoaded(state: UserStateModel) {
-    return state.loaded;
-  }
-
   @Action(LoadUsers)
   loadUsers(ctx: StateContext<UserStateModel>) {
-    const state = ctx.getState();
-    // TODO Можно отрефакторить на проверку users
-    if (state.loaded) {
-      return;
-    }
     return this.apiService.getUsers().pipe(
       tap((users) => {
-        ctx.patchState({users, loaded: true});
+        ctx.patchState({users});
       })
     );
   }
