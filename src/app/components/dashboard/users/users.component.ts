@@ -62,13 +62,12 @@ export class UsersComponent implements OnInit, OnDestroy {
         return users.map(user => {
           const userCarts = carts.filter(cart => cart.userId === user.id);
           const lastPurchaseDate = userCarts.length ? userCarts[userCarts.length - 1].date : 'No purchases yet';
-          // TODO Refactor to only reduce
-          const totalPurchases = userCarts.map(cart =>
-            cart.products.map(cartProduct => {
+          const totalPurchases = userCarts.reduce((acc, cart) => {
+            return acc + cart.products.reduce((sum, cartProduct) => {
               const product = products.find(p => p.id === cartProduct.productId);
-              return product ? product.price * cartProduct.quantity : 0;
-            }).reduce((acc, curr) => acc + curr, 0)
-          ).reduce((acc, curr) => acc + curr, 0);
+              return sum + (product ? product.price * cartProduct.quantity : 0);
+            }, 0);
+          }, 0);
 
           return {
             ...user,
