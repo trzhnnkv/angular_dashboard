@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {Select} from '@ngxs/store';
-import {Observable, combineLatest, Subscription} from 'rxjs';
+import {Observable, combineLatest, takeUntil, Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {AddUserDialogComponent} from "../add-user-dialog/add-user-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
@@ -33,7 +33,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  private subscriptions: Subscription[] = [];
+  private destroy$ = new Subject<void>();
   userRole: string | null = '';
 
   constructor(public dialog: MatDialog,
@@ -44,16 +44,18 @@ export class UsersComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userRole = this.authService.getUserRole();
     this.loadData();
-    // TODO check takeUntilDestroyed
+
     combineLatest([this.users$, this.carts$, this.products$]).pipe(
-      map(([usersLoaded, cartsLoaded, productsLoaded]) => usersLoaded.length > 0 && cartsLoaded.length > 0 && productsLoaded.length > 0),
+      map(([users, carts, products]) => users.length > 0 && carts.length > 0 && products.length > 0),
+      takeUntil(this.destroy$)
     ).subscribe(allLoaded => {
       this.loading = !allLoaded;
     });
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadData() {
@@ -78,12 +80,10 @@ export class UsersComponent implements OnInit, OnDestroy {
       })
     );
 
-    const usersWithDetailsSub = this.usersWithDetails$.subscribe(usersWithDetails => {
+    this.usersWithDetails$.subscribe(usersWithDetails => {
       this.sortedUsersWithDetails = usersWithDetails;
       this.originalUsersWithDetails = [...usersWithDetails];
     });
-
-    this.subscriptions.push(usersWithDetailsSub);
   }
 
   sortData(sort: Sort) {
