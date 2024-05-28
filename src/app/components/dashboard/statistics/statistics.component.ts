@@ -1,7 +1,18 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Select, Store} from '@ngxs/store';
-import {Observable, Subscription} from 'rxjs';
-import {CartState, ProductState, UserState} from '../../../shared/app.state';
+import {Select} from '@ngxs/store';
+import {combineLatest, Observable, Subject, takeUntil} from 'rxjs';
+import {Cart} from "../../../core/interfaces/cart.model";
+import {Product} from "../../../core/interfaces/product.model";
+import {User} from "../../../core/interfaces/user.model";
+import {CartState} from "../../../core/stores/carts/carts.state";
+import {ProductState} from "../../../core/stores/products/products.state";
+import {UserState} from "../../../core/stores/users/users.state";
+
+interface ChartData {
+  label: string;
+  // y - is a value
+  y: number;
+}
 
 @Component({
   selector: 'app-statistics',
@@ -9,45 +20,39 @@ import {CartState, ProductState, UserState} from '../../../shared/app.state';
   styleUrls: ['./statistics.component.css']
 })
 export class StatisticsComponent implements OnInit, OnDestroy {
-  show: boolean = false;
-  @Select(CartState.getCarts) carts$: Observable<any[]>;
-  @Select(ProductState.getProducts) products$: Observable<any[]>;
-  @Select(UserState.getUsers) users$: Observable<any[]>;
+  @Select(CartState.carts) carts$: Observable<Cart[]>;
+  @Select(ProductState.products) products$: Observable<Product[]>;
+  @Select(UserState.users) users$: Observable<User[]>;
 
-  productsData: any[] = [];
-  usersData: any[] = [];
-  activeUsersData: any[] = [];
+  productsData: ChartData[] = [];
+  usersData: ChartData[] = [];
+  activeUsersData: ChartData[] = [];
 
-  private subscriptions: Subscription[] = [];
+  private destroy$ = new Subject<void>();
 
-  constructor(private store: Store) {
-  }
+  constructor() {}
 
   ngOnInit() {
     this.loadData();
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadData() {
-    const cartsSub = this.carts$.subscribe(carts => {
-      const productsSub = this.products$.subscribe(products => {
-        const usersSub = this.users$.subscribe(users => {
-          this.generateProductsData(carts, products);
-          this.generateUsersData(users, carts, products);
-          this.generateActiveUsersData(carts);
-        });
-        this.subscriptions.push(usersSub);
-      });
-      this.subscriptions.push(productsSub);
+    combineLatest([this.carts$, this.products$, this.users$]).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(([carts, products, users]) => {
+      this.generateProductsData(carts, products);
+      this.generateUsersData(users, carts, products);
+      this.generateActiveUsersData(carts);
     });
-    this.subscriptions.push(cartsSub);
   }
 
-  generateProductsData(carts, products) {
-    const productCounts = {};
+  generateProductsData(carts: Cart[], products: Product[]) {
+    const productCounts: { [key: number]: number } = {};
     carts.forEach(cart => {
       cart.products.forEach(product => {
         if (productCounts[product.productId]) {
@@ -64,7 +69,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     }));
   }
 
-  generateUsersData(users, carts, products) {
+  generateUsersData(users: User[], carts: Cart[], products: Product[]) {
     this.usersData = users.map(user => {
       let totalPurchases = 0;
 
@@ -86,16 +91,17 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     });
   }
 
-  generateActiveUsersData(carts) {
+  generateActiveUsersData(carts: Cart[]) {
     const startDate = new Date('2020-03-02T00:00:00.000Z');
-    const dates = [...Array(7).keys()].map(i => {
+
+    const dates = new Array(7).fill(0).map((_, i) => {
       const date = new Date(startDate);
       date.setDate(startDate.getDate() - i);
       return date.toISOString().split('T')[0];
     });
 
     const activeUsers = dates.map(date => {
-      const usersForDate = new Set();
+      const usersForDate = new Set<number>();
       carts.forEach(cart => {
         if (cart.date.split('T')[0] === date) {
           usersForDate.add(cart.userId);

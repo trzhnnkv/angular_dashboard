@@ -1,7 +1,5 @@
-<app-header></app-header>
 @if (user$ | async; as user) {
   <div class="user-detail-container">
-    <button class="back-button" mat-stroked-button (click)="goBack()">Back</button>
     <div class="profile-header">
       <img src="{{ user.image ? user.image : './assets/default.svg' }}" class="profile-image" alt="{{ user.name.firstname }} {{ user.name.lastname }}">
       <div class="profile-info">
@@ -10,6 +8,7 @@
         <p>Username: {{ user.username }}</p>
         <p>Phone: {{ user.phone }}</p>
       </div>
+      <button class="back-button" mat-stroked-button (click)="goBack()">Back</button>
     </div>
 
     <div class="purchases-section">
@@ -31,6 +30,7 @@
                 </thead>
                 <tbody>
                   @for (cartProduct of cart.products; track $index) {
+<!--                    TODO you can use async pipe inside for block-->
                     @if (products$ | async; as products) {
                       @for (product of products; track $index) {
                         @if (product.id === cartProduct.productId) {
@@ -39,9 +39,9 @@
                             <td>{{ product.id }}</td>
                             <td>{{ product.price | currency:'$' }}</td>
                             <td class="quantity-control">
-                              <button mat-icon-button (click)="updateQuantity(cart.id, product.id, cartProduct.quantity - 1)" [disabled]="cartProduct.quantity <= 1">-</button>
+                              <button mat-icon-button (click)="updateQuantityDecrease(cart.id, product.id, cartProduct.quantity)" [disabled]="cartProduct.quantity <= 1">-</button>
                               <span>{{ cartProduct.quantity }}</span>
-                              <button mat-icon-button (click)="updateQuantity(cart.id, product.id, cartProduct.quantity + 1)">+</button>
+                              <button mat-icon-button (click)="updateQuantityIncrease(cart.id, product.id, cartProduct.quantity)">+</button>
                             </td>
                             <td>{{ (product.price * cartProduct.quantity) | currency:'$' }}</td>
                           </tr>
@@ -59,4 +59,7 @@
       }
     </div>
   </div>
+} @else {
+  <p>User with this ID not found</p>
+  <button mat-stroked-button (click)="goBack()">Back to dashboard</button>
 }

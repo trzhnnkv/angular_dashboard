@@ -1,5 +1,9 @@
 .back-button {
-  margin-top: 20px;
+  display: block;
+  margin: 0 0 0 auto;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .profile-header {
@@ -52,6 +56,7 @@
 
 .cart-container {
   margin-bottom: 40px;
+  min-width: 600px;
 }
 
 .cart-card {
@@ -59,6 +64,7 @@
   margin-bottom: 40px;
   border-radius: 5px;
   border: 1px solid #ddd;
+  overflow: scroll;
 }
 
 .cart-container:last-child .cart-card {
@@ -83,14 +89,6 @@
 .quantity-control span {
   margin: 0 10px;
   font-weight: bold;
-}
-
-button {
-  display: block;
-  margin: 0 0 0 auto;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
 }
 
 

@@ -1,21 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { LoadCarts, LoadProducts, LoadUsers } from './shared/app.state';
+import {LoadUsers} from "./core/stores/users/users.actions";
+import {LoadCarts} from "./core/stores/carts/carts.actions";
+import {LoadProducts} from "./core/stores/products/products.actions";
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  template: '<router-outlet></router-outlet>',
 })
 export class AppComponent implements OnInit {
 
   constructor(private store: Store) {}
 
   ngOnInit() {
-    setTimeout(() => {
-      this.store.dispatch(new LoadUsers());
-      this.store.dispatch(new LoadCarts());
-      this.store.dispatch(new LoadProducts());
-    }, 2000)
+    this.store.dispatch(new LoadUsers());
+    this.store.dispatch(new LoadCarts());
+    this.store.dispatch(new LoadProducts());
   }
 }

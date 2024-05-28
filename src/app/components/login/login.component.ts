@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {AuthService} from "../../shared/auth.service";
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AuthService} from "../../core/services/auth.service";
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
@@ -20,16 +20,14 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      const {username, password} = this.loginForm.value;
-      this.authService.login(username, password).subscribe(
-        () => {
-        },
-        error => {
+      const { username, password } = this.loginForm.value;
+      this.authService.login(username, password).subscribe({
+        error: (error) => {
           this.snackBar.open(error.error[0].toUpperCase() + error.error.slice(1), 'Close', {
             duration: 3000,
           });
         }
-      );
+      });
     } else {
       this.snackBar.open('Please correct the errors in the form.', 'Close', {
         duration: 3000,
@@ -37,11 +35,11 @@ export class LoginComponent {
     }
   }
 
-  get username() {
+  get username(): AbstractControl<any, any> | null {
     return this.loginForm.get('username');
   }
 
-  get password() {
+  get password(): AbstractControl<any, any> | null {
     return this.loginForm.get('password');
   }
 }

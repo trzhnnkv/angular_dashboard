@@ -1,6 +1,6 @@
 .stepper-container {
   padding: 10px;
-  height: calc(100vh - 50px);
+  max-height: calc(100vh - 100px);
   overflow-y: auto;
 }
 

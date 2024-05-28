@@ -1,17 +1,2 @@
 <app-header></app-header>
-<div class="dashboard-container">
-  <div>
-    <mat-tab-group (selectedTabChange)="onTabChange($event)" animationDuration="0ms">
-      <mat-tab label="Users">
-        @if (selectedIndex === 0) {
-          <app-users></app-users>
-        }
-      </mat-tab>
-      <mat-tab label="Statistics">
-        @if (selectedIndex === 1) {
-          <app-statistics></app-statistics>
-        }
-      </mat-tab>
-    </mat-tab-group>
-  </div>
-</div>
+<router-outlet></router-outlet>

@@ -25,6 +25,6 @@
         <mat-error>Maximum 20 characters allowed</mat-error>
       }
     </mat-form-field>
-    <button mat-stroked-button color="primary" type="submit">Login</button>
+    <button [disabled]="loginForm.invalid" mat-stroked-button color="primary" type="submit">Login</button>
   </form>
 </div>

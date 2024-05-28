@@ -1,14 +1,15 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from "@ngxs/store";
-import {
-  CartState,
-  ProductState,
-  UpdateProductQuantity,
-  UserState,
-} from "../../../shared/app.state";
 import {Observable, Subscription} from "rxjs";
 import {map} from "rxjs/operators";
+import {User} from "../../../core/interfaces/user.model";
+import {Cart} from "../../../core/interfaces/cart.model";
+import {Product} from "../../../core/interfaces/product.model";
+import {UserState} from "../../../core/stores/users/users.state";
+import {CartState} from "../../../core/stores/carts/carts.state";
+import {ProductState} from "../../../core/stores/products/products.state";
+import {UpdateProductQuantity} from "../../../core/stores/carts/carts.actions";
 
 @Component({
   selector: 'app-user-details',
@@ -17,12 +18,9 @@ import {map} from "rxjs/operators";
 })
 export class UserDetailsComponent implements OnInit, OnDestroy {
   userId: number;
-  user$: Observable<any>;
-  userCarts$: Observable<any[]>;
-  products$: Observable<any[]>;
-  selectedProductId: number;
-  quantity: number = 1;
-  selectedDate: Date;
+  user$: Observable<User | undefined>;
+  userCarts$: Observable<Cart[]>;
+  products$: Observable<Product[]>;
   private subscription: Subscription = new Subscription();
 
   constructor(private store: Store,
@@ -34,9 +32,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.route.params.subscribe(params => {
         this.userId = +params['id'];
-        this.user$ = this.store.select(UserState.getUserById).pipe(map(selector => selector(this.userId)));
-        this.userCarts$ = this.store.select(CartState.getCartsByUserId).pipe(map(selector => selector(this.userId)));
-        this.products$ = this.store.select(ProductState.getProducts);
+        this.user$ = this.store.select(UserState.userById).pipe(map(selector => selector(this.userId)));
+        this.userCarts$ = this.store.select(CartState.cartsByUserId).pipe(map(selector => selector(this.userId)));
+        this.products$ = this.store.select(ProductState.products);
       })
     );
   }
@@ -45,10 +43,14 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  updateQuantity(cartId: number, productId: number, quantity: number) {
-    if (quantity > 0) {
-      this.store.dispatch(new UpdateProductQuantity(cartId, this.userId, productId, quantity));
+  updateQuantityDecrease(cartId: number, productId: number, quantity: number) {
+    if (quantity > 1) {
+      this.store.dispatch(new UpdateProductQuantity(cartId, this.userId, productId, quantity - 1));
     }
+  }
+
+  updateQuantityIncrease(cartId: number, productId: number, quantity: number) {
+    this.store.dispatch(new UpdateProductQuantity(cartId, this.userId, productId, quantity + 1));
   }
 
   goBack() {
