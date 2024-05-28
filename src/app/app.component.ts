@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { LoadCarts, LoadProducts, LoadUsers } from './shared/app.state';
+import { LoadCarts, LoadProducts, LoadUsers } from './core/stores/app.state';
 
 @Component({
   selector: 'app-root',

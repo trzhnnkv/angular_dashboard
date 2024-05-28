@@ -1,6 +1,6 @@
 import {State, Action, StateContext, Selector} from '@ngxs/store';
 import {Injectable} from '@angular/core';
-import {ApiService} from './api.service';
+import {ApiService} from '../services/api.service';
 import {tap} from 'rxjs/operators';
 
 // TODO Move to core/stores

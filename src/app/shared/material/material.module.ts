@@ -10,7 +10,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
-import {MatOption, MatSelect, MatSelectModule} from "@angular/material/select";
+import {MatSelectModule} from "@angular/material/select";
 import {FormsModule} from "@angular/forms";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {DateAdapter, MatNativeDateModule, NativeDateAdapter} from "@angular/material/core";
@@ -28,7 +28,6 @@ const MaterialComponents = [
   MatProgressBarModule,
   MatIconModule,
   MatSelectModule,
-  MatOption,
   FormsModule,
   MatDatepickerModule,
   MatNativeDateModule

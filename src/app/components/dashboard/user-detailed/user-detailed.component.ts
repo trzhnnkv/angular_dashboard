@@ -7,7 +7,7 @@ import {
   ProductState,
   UpdateProductQuantity, User,
   UserState,
-} from "../../../shared/app.state";
+} from "../../../core/stores/app.state";
 import {Observable, Subscription} from "rxjs";
 import {map} from "rxjs/operators";
 

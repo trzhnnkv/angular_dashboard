@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
-import {AuthService} from './auth.service';
+import {AuthService} from '../../core/services/auth.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 // TODO Move to guards folder

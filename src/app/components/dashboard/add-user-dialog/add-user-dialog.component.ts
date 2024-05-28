@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {DialogRef, DIALOG_DATA} from '@angular/cdk/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AddUser, User} from '../../../shared/app.state';
+import {AddUser, User} from '../../../core/stores/app.state';
 import {Store} from '@ngxs/store';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';

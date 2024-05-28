@@ -2,12 +2,12 @@ import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {Select} from '@ngxs/store';
 import {Observable, combineLatest, Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {UserState, CartState, ProductState, User, Cart, Product, UserWithDetails} from '../../../shared/app.state';
+import {UserState, CartState, ProductState, User, Cart, Product, UserWithDetails} from '../../../core/stores/app.state';
 import {AddUserDialogComponent} from "../add-user-dialog/add-user-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import {MatSort, Sort} from '@angular/material/sort';
-import {AuthService} from "../../../shared/auth.service";
+import {AuthService} from "../../../core/services/auth.service";
 
 @Component({
   selector: 'app-users',
