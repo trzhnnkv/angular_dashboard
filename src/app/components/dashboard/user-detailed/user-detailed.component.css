@@ -1,5 +1,9 @@
 .back-button {
-  margin-top: 20px;
+  display: block;
+  margin: 20px 0 0 auto;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .profile-header {
@@ -83,14 +87,6 @@
 .quantity-control span {
   margin: 0 10px;
   font-weight: bold;
-}
-
-button {
-  display: block;
-  margin: 0 0 0 auto;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
 }
 
 

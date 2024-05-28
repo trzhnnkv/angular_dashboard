@@ -18,10 +18,9 @@ import {map} from "rxjs/operators";
 })
 export class UserDetailsComponent implements OnInit, OnDestroy {
   userId: number;
-  user$: Observable<User>;
+  user$: Observable<User | undefined>;
   userCarts$: Observable<Cart[]>;
   products$: Observable<Product[]>;
-  quantity: number = 1;
   private subscription: Subscription = new Subscription();
 
   constructor(private store: Store,
