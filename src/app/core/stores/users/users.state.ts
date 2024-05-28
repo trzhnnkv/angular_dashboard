@@ -63,7 +63,6 @@ export class UserState {
   }
 
   private generateId(users: User[]): number {
-    // TODO Can be refactored
-    return users.length ? Math.max(...users.map(user => user.id)) + 1 : 1;
+    return users.length + 1;
   }
 }
