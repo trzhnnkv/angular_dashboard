@@ -93,8 +93,8 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
   generateActiveUsersData(carts: Cart[]) {
     const startDate = new Date('2020-03-02T00:00:00.000Z');
-    // TODO change 1. new Array(7). 2. keys to fill
-    const dates = [...Array(7).keys()].map(i => {
+
+    const dates = new Array(7).fill(0).map((_, i) => {
       const date = new Date(startDate);
       date.setDate(startDate.getDate() - i);
       return date.toISOString().split('T')[0];
