@@ -12,11 +12,8 @@ export class AppComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit() {
-    // TODO Для чего таймаут?
-    setTimeout(() => {
-      this.store.dispatch(new LoadUsers());
-      this.store.dispatch(new LoadCarts());
-      this.store.dispatch(new LoadProducts());
-    }, 2000)
+    this.store.dispatch(new LoadUsers());
+    this.store.dispatch(new LoadCarts());
+    this.store.dispatch(new LoadProducts());
   }
 }
