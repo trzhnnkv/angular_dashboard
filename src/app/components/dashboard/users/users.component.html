@@ -12,23 +12,19 @@
       </tr>
       </thead>
       <tbody>
-<!--      TODO remove if...else and replace with empty-->
-        @if (sortedUsersWithDetails.length) {
           @for (user of sortedUsersWithDetails; track user) {
             <tr (click)="navigateToDetails(user.id)">
-<!--              TODO check css ellipsis-->
-              <td>{{ ((user.name.firstname + ' ' + user.name.lastname).length >= 20 ? (user.name.firstname + ' ' + user.name.lastname).slice(0, 20) + '...' : user.name.firstname + ' ' + user.name.lastname) | titlecase }}</td>
+              <td>{{ (user.name.firstname + ' ' + user.name.lastname) | titlecase }}</td>
               <td>{{ user.lastPurchaseDate !== 'No purchases yet' ? (user.lastPurchaseDate | date: 'fullDate') : user.lastPurchaseDate }}</td>
               <td>{{ user.totalPurchases | currency }}</td>
             </tr>
+          } @empty {
+            <tr>
+              <td colspan="3">
+                <mat-error>No data</mat-error>
+              </td>
+            </tr>
           }
-        } @else {
-          <tr>
-            <td colspan="3">
-              <mat-error>No data</mat-error>
-            </td>
-          </tr>
-        }
       </tbody>
     </table>
     @if(userRole === 'admin') {
