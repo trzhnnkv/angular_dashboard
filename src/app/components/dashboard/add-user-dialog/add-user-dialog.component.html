@@ -72,11 +72,11 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup">
+    <mat-step>
       <div class="step-label">
         <ng-template matStepLabel>Image</ng-template>
       </div>
-      <form [formGroup]="secondFormGroup" (ngSubmit)="add()">
+      <form (ngSubmit)="add()">
         <div class="drag-drop-area" (drop)="onFileDropped($event)" (dragover)="onDragOver($event)">
           <p>Drag and drop an image here, or click to select a file</p>
           @if (imgPath) {

@@ -2,6 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {DialogRef, DIALOG_DATA} from '@angular/cdk/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Store} from '@ngxs/store';
+import {finalize} from "rxjs";
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {User} from "../../../core/interfaces/user.model";
@@ -14,7 +15,6 @@ import {AddUser} from "../../../core/stores/users/users.actions";
 })
 export class AddUserDialogComponent {
   firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
   file: File | null = null;
   imgPath: string = '';
   isLoading: boolean = false;
@@ -27,7 +27,6 @@ export class AddUserDialogComponent {
     private router: Router,
     @Inject(DIALOG_DATA) public data: User
   ) {
-    // TODO change to FormGroup
     this.firstFormGroup = this.fb.group({
       firstname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       lastname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
@@ -35,48 +34,37 @@ export class AddUserDialogComponent {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\+\d{11}$/)]]
     });
-
-    // TODO can be removed
-    this.secondFormGroup = this.fb.group({});
   }
 
-  // TODO эта функция и функция ниже на 90% одинаковые
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      if (!this.isValidImage(file)) {
-        this.showUnsupportedFormatError();
-        return;
-      }
-      this.file = file;
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imgPath = e.target.result;
-      };
-      reader.readAsDataURL(this.file);
+      this.handleFile(input.files[0]);
     }
   }
 
   onFileDropped(event: DragEvent) {
     event.preventDefault();
     if (event.dataTransfer?.files.length) {
-      const file = event.dataTransfer.files[0];
-      if (!this.isValidImage(file)) {
-        this.showUnsupportedFormatError();
-        return;
-      }
-      this.file = file;
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imgPath = e.target.result;
-      };
-      reader.readAsDataURL(this.file);
+      this.handleFile(event.dataTransfer.files[0]);
     }
   }
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
+  }
+
+  handleFile(file: File) {
+    if (!this.isValidImage(file)) {
+      this.showUnsupportedFormatError();
+      return;
+    }
+    this.file = file;
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imgPath = e.target.result;
+    };
+    reader.readAsDataURL(this.file);
   }
 
   isValidImage(file: File): boolean {
@@ -112,23 +100,24 @@ export class AddUserDialogComponent {
       image: this.imgPath || ''
     };
 
-    this.store.dispatch(new AddUser(newUser)).subscribe({
-      next: (state) => {
-        const addedUser = state.user.users[state.user.users.length - 1];
-        // TODO isLoading can be refactor to finalize pipe
+    this.store.dispatch(new AddUser(newUser))
+      .pipe(finalize(() => {
         this.isLoading = false;
-        this.dialogRef.close();
-        this.snackBar.open('User added successfully', 'Close', {
-          duration: 3000,
-        });
-        this.router.navigate(['/user', addedUser.id]);
-      },
-      error: () => {
-        this.isLoading = false;
-        this.snackBar.open('Failed to add user', 'Close', {
-          duration: 3000,
-        });
-      }
-    });
+      }))
+      .subscribe({
+        next: (state) => {
+          const addedUser = state.user.users[state.user.users.length - 1];
+          this.dialogRef.close();
+          this.snackBar.open('User added successfully', 'Close', {
+            duration: 3000,
+          });
+          this.router.navigate(['dashboard/user', addedUser.id]);
+        },
+        error: () => {
+          this.snackBar.open('Failed to add user', 'Close', {
+            duration: 3000,
+          });
+        }
+      });
   }
 }
