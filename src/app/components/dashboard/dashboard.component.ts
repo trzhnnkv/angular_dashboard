@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {MatTabChangeEvent} from '@angular/material/tabs';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,9 +6,5 @@ import {MatTabChangeEvent} from '@angular/material/tabs';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
-  selectedIndex: number = 0;
 
-  onTabChange(event: MatTabChangeEvent) {
-    this.selectedIndex = event.index;
-  }
 }

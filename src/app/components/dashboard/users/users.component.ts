@@ -128,7 +128,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   navigateToDetails(userId: number) {
-    this.router.navigate(['/user', userId]);
+    this.router.navigate(['/dashboard/user', userId]);
   }
 }
 
