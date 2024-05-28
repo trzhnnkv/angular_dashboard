@@ -23,10 +23,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   loading: boolean = true;
   filterValue: string = '';
 
-  // TODO Не очень понятное название. Как будто бы это функция.
-  @Select(UserState.getUsers) usersLoaded$: Observable<User[]>;
-  @Select(CartState.getCarts) cartsLoaded$: Observable<Cart[]>;
-  @Select(ProductState.getProducts) productsLoaded$: Observable<Product[]>;
+  @Select(UserState.getUsers) users$: Observable<User[]>;
+  @Select(CartState.getCarts) carts$: Observable<Cart[]>;
+  @Select(ProductState.getProducts) products$: Observable<Product[]>;
 
   usersWithDetails$: Observable<UserWithDetails[]>;
   sortedUsersWithDetails: UserWithDetails[] = [];
@@ -46,7 +45,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.userRole = this.authService.getUserRole();
     this.loadData();
     // TODO check takeUntilDestroyed
-    combineLatest([this.usersLoaded$, this.cartsLoaded$, this.productsLoaded$]).pipe(
+    combineLatest([this.users$, this.carts$, this.products$]).pipe(
       map(([usersLoaded, cartsLoaded, productsLoaded]) => usersLoaded.length > 0 && cartsLoaded.length > 0 && productsLoaded.length > 0),
     ).subscribe(allLoaded => {
       this.loading = !allLoaded;
@@ -58,7 +57,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    this.usersWithDetails$ = combineLatest([this.usersLoaded$, this.cartsLoaded$, this.productsLoaded$]).pipe(
+    this.usersWithDetails$ = combineLatest([this.users$, this.carts$, this.products$]).pipe(
       map(([users, carts, products]) => {
         return users.map(user => {
           const userCarts = carts.filter(cart => cart.userId === user.id);

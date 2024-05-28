@@ -101,7 +101,7 @@ export class AddUserDialogComponent {
     this.isLoading = true;
 
     const newUser: User = {
-      id: 0, // Temporary ID, will be set by the users
+      id: 0,
       name: {
         firstname: this.firstFormGroup.value.firstname,
         lastname: this.firstFormGroup.value.lastname,
