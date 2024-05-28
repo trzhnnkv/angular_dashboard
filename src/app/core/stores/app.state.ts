@@ -2,15 +2,16 @@ import {State, Action, StateContext, Selector} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {ApiService} from '../services/api.service';
 import {tap} from 'rxjs/operators';
+import {User} from "../interfaces/user.model";
+import {Product} from "../interfaces/product.model";
+import {Cart} from "../interfaces/cart.model";
 
-// TODO Move to core/stores
 export class LoadUsers {
   static readonly type = '[User] Load Users';
 }
 
 export class AddUser {
   static readonly type = '[User] Add User';
-
   constructor(public user: User) {
   }
 }
@@ -21,50 +22,12 @@ export class LoadCarts {
 
 export class UpdateProductQuantity {
   static readonly type = '[Cart] Update Product Quantity';
-
   constructor(public cartId: number, public userId: number, public productId: number, public quantity: number) {
   }
 }
 
 export class LoadProducts {
   static readonly type = '[Product] Load Products';
-}
-
-// TODO Move to interfaces
-export interface User {
-  id: number;
-  name: {
-    firstname: string;
-    lastname: string;
-  };
-  email: string;
-  username: string;
-  phone: string;
-  image?: string;
-}
-
-export interface UserWithDetails extends User {
-  lastPurchaseDate: string | Date;
-  totalPurchases: number;
-}
-
-export interface CartProduct {
-  productId: number;
-  quantity: number;
-}
-
-export interface Cart {
-  id: number;
-  userId: number;
-  date: string;
-  products: CartProduct[];
-}
-
-export interface Product {
-  id: number;
-  price: number;
-  title: string;
-  description: string;
 }
 
 export interface UserStateModel {

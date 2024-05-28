@@ -1,15 +1,12 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from "@ngxs/store";
-import {
-  Cart,
-  CartState, Product,
-  ProductState,
-  UpdateProductQuantity, User,
-  UserState,
-} from "../../../core/stores/app.state";
+import {CartState, ProductState, UpdateProductQuantity, UserState} from "../../../core/stores/app.state";
 import {Observable, Subscription} from "rxjs";
 import {map} from "rxjs/operators";
+import {User} from "../../../core/interfaces/user.model";
+import {Cart} from "../../../core/interfaces/cart.model";
+import {Product} from "../../../core/interfaces/product.model";
 
 @Component({
   selector: 'app-user-details',
