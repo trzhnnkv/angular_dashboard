@@ -68,8 +68,6 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    this.store.dispatch(new LoadUsers());
-
     this.usersWithDetails$ = combineLatest([this.users$, this.carts$, this.products$]).pipe(
       map(([users, carts, products]) => {
         return users.map(user => {
