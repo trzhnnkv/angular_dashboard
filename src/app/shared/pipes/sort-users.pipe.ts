@@ -26,10 +26,8 @@ export class SortUsersPipe implements PipeTransform {
     });
   }
 
-  // TODO totalPurchases its a number, but type has string;
-  private compare(a: number | string, b: number | string, isAsc: boolean): number {
-    // TODO when arguments is number can be used a - b instead a < b....
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  private compare(a: number, b: number, isAsc: boolean): number {
+    return (a - b) * (isAsc ? 1 : -1);
   }
 
   private compareNames(a: string, b: string, isAsc: boolean): number {
