@@ -12,7 +12,7 @@
       </tr>
       </thead>
       <tbody>
-          @for (user of sortedUsersWithDetails; track user) {
+          @for (user of (sortedUsersWithDetails | filterUsers:filterValue | sortUsers:sortActive:sortDirection); track user) {
             <tr (click)="navigateToDetails(user.id)">
               <td>{{ (user.name.firstname + ' ' + user.name.lastname) | titlecase }}</td>
               <td>{{ user.lastPurchaseDate !== 'No purchases yet' ? (user.lastPurchaseDate | date: 'fullDate') : user.lastPurchaseDate }}</td>

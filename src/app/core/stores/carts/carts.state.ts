@@ -42,7 +42,7 @@ export class CartState {
   updateProductQuantity(ctx: StateContext<CartStateModel>, action: UpdateProductQuantity) {
     const state = ctx.getState();
     const carts = state.carts.map(cart => {
-      // TODO map can be change to users operators
+      // TODO map can be change to state operators
       if (cart.id === action.cartId && cart.userId === action.userId) {
         cart.products = cart.products.map(product => {
           if (product.productId === action.productId) {

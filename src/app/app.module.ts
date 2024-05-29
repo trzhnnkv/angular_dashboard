@@ -34,6 +34,7 @@ import {CartState} from "./core/stores/carts/carts.state";
     DashboardModule
   ],
   providers: [],
+  exports: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -44,7 +44,7 @@ export class UserState {
     const state = ctx.getState();
     const newUser: User = {...action.user, id: this.generateId(state.users)};
     const updatedUsers = [...state.users, newUser];
-    // TODO Check users operators (ngxs docs)
+    // TODO Check state operators (ngxs docs)
     ctx.patchState({users: updatedUsers});
     return updatedUsers;
   }

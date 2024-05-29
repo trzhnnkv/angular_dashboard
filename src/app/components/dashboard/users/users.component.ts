@@ -14,6 +14,8 @@ import { UserState } from "../../../core/stores/users/users.state";
 import { CartState } from "../../../core/stores/carts/carts.state";
 import { ProductState } from "../../../core/stores/products/products.state";
 import { LoadUsers } from "../../../core/stores/users/users.actions";
+import { SortUsersPipe } from "../../../shared/pipes/sort-users.pipe";
+import { FilterUsersPipe } from "../../../shared/pipes/filter-users.pipe";
 
 @Component({
   selector: 'app-users',
@@ -31,16 +33,22 @@ export class UsersComponent implements OnInit, OnDestroy {
   usersWithDetails$: Observable<UserWithDetails[]>;
   sortedUsersWithDetails: UserWithDetails[] = [];
   originalUsersWithDetails: UserWithDetails[] = [];
+  sortActive: string = '';
+  sortDirection: string = '';
 
   @ViewChild(MatSort) sort: MatSort;
 
   private destroy$ = new Subject<void>();
   userRole: string | null = '';
 
-  constructor(public dialog: MatDialog,
-              private router: Router,
-              private authService: AuthService,
-              private store: Store) {}
+  constructor(
+    public dialog: MatDialog,
+    private router: Router,
+    private authService: AuthService,
+    private store: Store,
+    private sortUsersPipes: SortUsersPipe,
+    private filterUsersPipe: FilterUsersPipe
+  ) {}
 
   ngOnInit() {
     this.userRole = this.authService.getUserRole();
@@ -90,41 +98,22 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   sortData(sort: Sort) {
-    const data = this.sortedUsersWithDetails.slice();
-    if (!sort.active || sort.direction === '') {
-      this.sortedUsersWithDetails = [...this.originalUsersWithDetails];
+    this.sortActive = sort.active;
+    this.sortDirection = sort.direction;
+
+    if (!this.sortActive || this.sortDirection === '') {
+      this.sortedUsersWithDetails = this.originalUsersWithDetails;
       return;
     }
 
-    this.sortedUsersWithDetails = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'name':
-          return compareNames(a.name.firstname, b.name.firstname, isAsc);
-        case 'date':
-          return compareDates(a.lastPurchaseDate, b.lastPurchaseDate, isAsc);
-        case 'total':
-          return compare(a.totalPurchases, b.totalPurchases, isAsc);
-        default:
-          return 0;
-      }
-    });
+    this.sortedUsersWithDetails = this.sortUsersPipes.transform(this.originalUsersWithDetails, this.sortActive, this.sortDirection);
   }
 
   applyFilter(event?: Event) {
     if (event) {
       this.filterValue = (event.target as HTMLInputElement).value.toLowerCase();
     }
-    // TODO вынести в pipe
-    this.sortedUsersWithDetails = this.originalUsersWithDetails.filter(user => {
-      const fullName = `${user.name.firstname} ${user.name.lastname}`.toLowerCase();
-      const lastPurchaseDate = user.lastPurchaseDate !== 'No purchases yet' ? new Date(user.lastPurchaseDate).toLocaleDateString().toLowerCase() : 'no purchases yet';
-      const totalPurchases = user.totalPurchases.toString().toLowerCase();
-
-      return fullName.includes(this.filterValue) ||
-        lastPurchaseDate.includes(this.filterValue) ||
-        totalPurchases.includes(this.filterValue);
-    });
+    this.sortedUsersWithDetails = this.filterUsersPipe.transform(this.originalUsersWithDetails, this.filterValue);
   }
 
   openAddUserDialog() {
@@ -134,22 +123,4 @@ export class UsersComponent implements OnInit, OnDestroy {
   navigateToDetails(userId: number) {
     this.router.navigate(['/dashboard/user', userId]);
   }
-}
-
-function compare(a: number | string, b: number | string, isAsc: boolean) {
-  if (a < b) return isAsc ? -1 : 1;
-  if (a > b) return isAsc ? 1 : -1;
-  return 0;
-}
-
-function compareNames(a: string, b: string, isAsc: boolean) {
-  return a.localeCompare(b) * (isAsc ? 1 : -1);
-}
-
-function compareDates(a: string | Date, b: string | Date, isAsc: boolean) {
-  const dateA = a === 'No purchases yet' ? new Date(0) : new Date(a);
-  const dateB = b === 'No purchases yet' ? new Date(0) : new Date(b);
-  if (dateA < dateB) return isAsc ? -1 : 1;
-  if (dateA > dateB) return isAsc ? 1 : -1;
-  return 0;
 }
