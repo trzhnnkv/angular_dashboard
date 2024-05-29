@@ -2,7 +2,7 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from "@ngxs/store";
 import {Observable, Subject} from "rxjs";
-import {map, takeUntil} from "rxjs/operators";
+import {map} from "rxjs/operators";
 import {User} from "../../../core/interfaces/user.model";
 import {Cart} from "../../../core/interfaces/cart.model";
 import {Product} from "../../../core/interfaces/product.model";
@@ -16,12 +16,11 @@ import {UpdateProductQuantity} from "../../../core/stores/carts/carts.actions";
   templateUrl: './user-detailed.component.html',
   styleUrls: ['./user-detailed.component.css']
 })
-export class UserDetailsComponent implements OnInit, OnDestroy {
+export class UserDetailsComponent implements OnInit {
   userId: number;
   user$: Observable<User | undefined>;
   userCarts$: Observable<Cart[]>;
   products$: Observable<Product[]>;
-  private destroy$ = new Subject<void>();
 
   constructor(private store: Store,
               private router: Router,
@@ -38,11 +37,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     );
     this.products$ = this.store.select(ProductState.products).pipe(
     );
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   decreaseQuantity(cartId: number, productId: number, quantity: number) {
