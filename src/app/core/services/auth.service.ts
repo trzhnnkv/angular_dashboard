@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Router} from '@angular/router';
 import {tap} from 'rxjs/operators';
 import {environment} from "../../../environments/environment";
 
@@ -10,7 +9,7 @@ import {environment} from "../../../environments/environment";
 export class AuthService {
   private baseUrl = environment.baseUrl
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient) {
   }
 
   login(username: string, password: string) {
@@ -22,16 +21,12 @@ export class AuthService {
         } else {
           localStorage.setItem('role', 'user');
         }
-        // TODO not good use navigation on login method. it cannot be reused, because always be redirecting to dashboard.
-        this.router.navigate(['/dashboard']);
       }));
   }
 
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
-    // TODO not good use navigation on login method. it cannot be reused, because always be redirecting to login.
-    this.router.navigate(['/login']);
   }
 
   isAuthenticated(): boolean {
