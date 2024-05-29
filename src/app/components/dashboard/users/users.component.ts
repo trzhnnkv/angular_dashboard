@@ -1,20 +1,18 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable, combineLatest, takeUntil, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { AddUserDialogComponent } from "../add-user-dialog/add-user-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
-import { Router } from "@angular/router";
-import { MatSort, Sort } from '@angular/material/sort';
-import { AuthService } from "../../../core/services/auth.service";
-import { User, UserWithDetails } from "../../../core/interfaces/user.model";
-import { Cart } from "../../../core/interfaces/cart.model";
-import { Product } from "../../../core/interfaces/product.model";
-import { UserState } from "../../../core/stores/users/users.state";
-import { CartState } from "../../../core/stores/carts/carts.state";
-import { ProductState } from "../../../core/stores/products/products.state";
-import { SortUsersPipe } from "../../../shared/pipes/sort-users.pipe";
-import { FilterUsersPipe } from "../../../shared/pipes/filter-users.pipe";
+import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
+import {Select} from '@ngxs/store';
+import {Observable, combineLatest, takeUntil, Subject} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {AddUserDialogComponent} from "../add-user-dialog/add-user-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
+import {Router} from "@angular/router";
+import {MatSort, Sort} from '@angular/material/sort';
+import {AuthService} from "../../../core/services/auth.service";
+import {User, UserWithDetails} from "../../../core/interfaces/user.model";
+import {Cart} from "../../../core/interfaces/cart.model";
+import {Product} from "../../../core/interfaces/product.model";
+import {UserState} from "../../../core/stores/users/users.state";
+import {CartState} from "../../../core/stores/carts/carts.state";
+import {ProductState} from "../../../core/stores/products/products.state";
 
 @Component({
   selector: 'app-users',
@@ -44,10 +42,8 @@ export class UsersComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private router: Router,
     private authService: AuthService,
-    private store: Store,
-    private sortUsersPipes: SortUsersPipe,
-    private filterUsersPipe: FilterUsersPipe
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.userRole = this.authService.getUserRole();
@@ -103,17 +99,12 @@ export class UsersComponent implements OnInit, OnDestroy {
       this.sortedUsersWithDetails = this.originalUsersWithDetails;
       return;
     }
-
-    // TODO looks like can be deleted
-    this.sortedUsersWithDetails = this.sortUsersPipes.transform(this.originalUsersWithDetails, this.sortActive, this.sortDirection);
   }
 
   applyFilter(event?: Event) {
     if (event) {
       this.filterValue = (event.target as HTMLInputElement).value.toLowerCase();
     }
-    // TODO looks like can be deleted
-    this.sortedUsersWithDetails = this.filterUsersPipe.transform(this.originalUsersWithDetails, this.filterValue);
   }
 
   openAddUserDialog() {
