@@ -1,7 +1,7 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from "@ngxs/store";
-import {Observable, Subscription} from "rxjs";
+import {Observable} from "rxjs";
 import {map} from "rxjs/operators";
 import {User} from "../../../core/interfaces/user.model";
 import {Cart} from "../../../core/interfaces/cart.model";
@@ -16,12 +16,11 @@ import {UpdateProductQuantity} from "../../../core/stores/carts/carts.actions";
   templateUrl: './user-detailed.component.html',
   styleUrls: ['./user-detailed.component.css']
 })
-export class UserDetailsComponent implements OnInit, OnDestroy {
+export class UserDetailsComponent implements OnInit {
   userId: number;
   user$: Observable<User | undefined>;
   userCarts$: Observable<Cart[]>;
   products$: Observable<Product[]>;
-  private subscription: Subscription = new Subscription();
 
   constructor(private store: Store,
               private router: Router,
@@ -29,27 +28,24 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscription.add(
-      this.route.params.subscribe(params => {
-        this.userId = +params['id'];
-        this.user$ = this.store.select(UserState.userById).pipe(map(selector => selector(this.userId)));
-        this.userCarts$ = this.store.select(CartState.cartsByUserId).pipe(map(selector => selector(this.userId)));
-        this.products$ = this.store.select(ProductState.products);
-      })
+    this.userId = +this.route.snapshot.params['id'];
+    this.user$ = this.store.select(UserState.userById).pipe(
+      map(selector => selector(this.userId)),
+    );
+    this.userCarts$ = this.store.select(CartState.cartsByUserId).pipe(
+      map(selector => selector(this.userId)),
+    );
+    this.products$ = this.store.select(ProductState.products).pipe(
     );
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
-  updateQuantityDecrease(cartId: number, productId: number, quantity: number) {
+  decreaseQuantity(cartId: number, productId: number, quantity: number) {
     if (quantity > 1) {
       this.store.dispatch(new UpdateProductQuantity(cartId, this.userId, productId, quantity - 1));
     }
   }
 
-  updateQuantityIncrease(cartId: number, productId: number, quantity: number) {
+  increaseQuantity(cartId: number, productId: number, quantity: number) {
     this.store.dispatch(new UpdateProductQuantity(cartId, this.userId, productId, quantity + 1));
   }
 

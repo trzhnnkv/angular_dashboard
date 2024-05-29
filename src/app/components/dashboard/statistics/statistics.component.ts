@@ -24,9 +24,9 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   @Select(ProductState.products) products$: Observable<Product[]>;
   @Select(UserState.users) users$: Observable<User[]>;
 
-  productsData: ChartData[] = [];
-  usersData: ChartData[] = [];
-  activeUsersData: ChartData[] = [];
+  productPurchaseRatios: ChartData[] = [];
+  userTotalPurchases: ChartData[] = [];
+  dailyActiveUsers: ChartData[] = [];
 
   private destroy$ = new Subject<void>();
 
@@ -45,13 +45,13 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     combineLatest([this.carts$, this.products$, this.users$]).pipe(
       takeUntil(this.destroy$)
     ).subscribe(([carts, products, users]) => {
-      this.generateProductsData(carts, products);
-      this.generateUsersData(users, carts, products);
-      this.generateActiveUsersData(carts);
+      this.calculateProductPurchaseRatios(carts, products);
+      this.calculateUserTotalPurchases(users, carts, products);
+      this.calculateDailyActiveUsers(carts);
     });
   }
 
-  generateProductsData(carts: Cart[], products: Product[]) {
+  calculateProductPurchaseRatios(carts: Cart[], products: Product[]) {
     const productCounts: { [key: number]: number } = {};
     carts.forEach(cart => {
       cart.products.forEach(product => {
@@ -63,14 +63,14 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.productsData = products.map(product => ({
+    this.productPurchaseRatios = products.map(product => ({
       label: product.title.length >= 20 ? product.title.slice(0, 20) + "..." : product.title,
       y: productCounts[product.id] || 0
     }));
   }
 
-  generateUsersData(users: User[], carts: Cart[], products: Product[]) {
-    this.usersData = users.map(user => {
+  calculateUserTotalPurchases(users: User[], carts: Cart[], products: Product[]) {
+    this.userTotalPurchases = users.map(user => {
       let totalPurchases = 0;
 
       carts.forEach(cart => {
@@ -91,7 +91,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     });
   }
 
-  generateActiveUsersData(carts: Cart[]) {
+  calculateDailyActiveUsers(carts: Cart[]) {
     const startDate = new Date('2020-03-02T00:00:00.000Z');
 
     const dates = new Array(7).fill(0).map((_, i) => {
@@ -100,20 +100,20 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       return date.toISOString().split('T')[0];
     });
 
-    const activeUsers = dates.map(date => {
-      const usersForDate = new Set<number>();
+    const userActivity = dates.map(date => {
+      const usersID = new Set<number>();
       carts.forEach(cart => {
         if (cart.date.split('T')[0] === date) {
-          usersForDate.add(cart.userId);
+          usersID.add(cart.userId);
         }
       });
 
       return {
         label: date,
-        y: usersForDate.size
+        y: usersID.size
       };
     });
 
-    this.activeUsersData = activeUsers.reverse();
+    this.dailyActiveUsers = userActivity.reverse();
   }
 }

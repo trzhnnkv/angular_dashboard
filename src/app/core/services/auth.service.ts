@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Router} from '@angular/router';
 import {tap} from 'rxjs/operators';
 import {environment} from "../../../environments/environment";
 
@@ -10,7 +9,7 @@ import {environment} from "../../../environments/environment";
 export class AuthService {
   private baseUrl = environment.baseUrl
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient) {
   }
 
   login(username: string, password: string) {
@@ -22,14 +21,12 @@ export class AuthService {
         } else {
           localStorage.setItem('role', 'user');
         }
-        this.router.navigate(['/dashboard']);
       }));
   }
 
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
-    this.router.navigate(['/login']);
   }
 
   isAuthenticated(): boolean {

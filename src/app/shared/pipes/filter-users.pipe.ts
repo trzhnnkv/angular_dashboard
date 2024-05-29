@@ -9,7 +9,7 @@ export class FilterUsersPipe implements PipeTransform {
     if (!filterValue) {
       return users;
     }
-    filterValue = filterValue.toLowerCase();
+    const filterValueLowerCase = filterValue.toLowerCase();
 
     return users.filter(user => {
       const fullName = `${user.name.firstname} ${user.name.lastname}`.toLowerCase();
@@ -18,9 +18,9 @@ export class FilterUsersPipe implements PipeTransform {
         : 'no purchases yet';
       const totalPurchases = user.totalPurchases.toString().toLowerCase();
 
-      return fullName.includes(filterValue) ||
-        lastPurchaseDate.includes(filterValue) ||
-        totalPurchases.includes(filterValue);
+      return fullName.includes(filterValueLowerCase) ||
+        lastPurchaseDate.includes(filterValueLowerCase) ||
+        totalPurchases.includes(filterValueLowerCase);
     });
   }
 }
