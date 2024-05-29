@@ -74,6 +74,7 @@ export class UsersComponent implements OnInit, OnDestroy {
           const lastPurchaseDate = userCarts.length ? userCarts[userCarts.length - 1].date : 'No purchases yet';
           const totalPurchases = userCarts.reduce((acc, cart) => {
             return acc + cart.products.reduce((sum, cartProduct) => {
+              // TODO try create mapper
               const product = products.find(p => p.id === cartProduct.productId);
               return sum + (product ? product.price * cartProduct.quantity : 0);
             }, 0);
@@ -103,6 +104,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // TODO looks like can be deleted
     this.sortedUsersWithDetails = this.sortUsersPipes.transform(this.originalUsersWithDetails, this.sortActive, this.sortDirection);
   }
 
@@ -110,6 +112,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     if (event) {
       this.filterValue = (event.target as HTMLInputElement).value.toLowerCase();
     }
+    // TODO looks like can be deleted
     this.sortedUsersWithDetails = this.filterUsersPipe.transform(this.originalUsersWithDetails, this.filterValue);
   }
 

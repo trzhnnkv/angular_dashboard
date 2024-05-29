@@ -22,6 +22,7 @@ export class AuthService {
         } else {
           localStorage.setItem('role', 'user');
         }
+        // TODO not good use navigation on login method. it cannot be reused, because always be redirecting to dashboard.
         this.router.navigate(['/dashboard']);
       }));
   }
@@ -29,6 +30,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
+    // TODO not good use navigation on login method. it cannot be reused, because always be redirecting to login.
     this.router.navigate(['/login']);
   }
 

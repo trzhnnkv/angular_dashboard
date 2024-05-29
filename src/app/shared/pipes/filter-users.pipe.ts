@@ -9,6 +9,7 @@ export class FilterUsersPipe implements PipeTransform {
     if (!filterValue) {
       return users;
     }
+    // TODO do not override argument. create const for it.
     filterValue = filterValue.toLowerCase();
 
     return users.filter(user => {

@@ -101,6 +101,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     });
 
     const activeUsers = dates.map(date => {
+      // TODO rename variable
       const usersForDate = new Set<number>();
       carts.forEach(cart => {
         if (cart.date.split('T')[0] === date) {

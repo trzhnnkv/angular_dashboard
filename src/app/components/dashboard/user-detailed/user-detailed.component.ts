@@ -29,19 +29,23 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // TODO use snapshot
     this.route.params.pipe(
       takeUntil(this.destroy$)
     ).subscribe(params => {
       this.userId = +params['id'];
       this.user$ = this.store.select(UserState.userById).pipe(
         map(selector => selector(this.userId)),
+        //TODO can be remove, if not use subscribe
         takeUntil(this.destroy$)
       );
       this.userCarts$ = this.store.select(CartState.cartsByUserId).pipe(
         map(selector => selector(this.userId)),
+        //TODO can be remove, if not use subscribe
         takeUntil(this.destroy$)
       );
       this.products$ = this.store.select(ProductState.products).pipe(
+        //TODO can be remove, if not use subscribe
         takeUntil(this.destroy$)
       );
     });
@@ -52,12 +56,14 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  // TODO rename method
   updateQuantityDecrease(cartId: number, productId: number, quantity: number) {
     if (quantity > 1) {
       this.store.dispatch(new UpdateProductQuantity(cartId, this.userId, productId, quantity - 1));
     }
   }
 
+  // TODO rename method
   updateQuantityIncrease(cartId: number, productId: number, quantity: number) {
     this.store.dispatch(new UpdateProductQuantity(cartId, this.userId, productId, quantity + 1));
   }
