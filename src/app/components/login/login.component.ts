@@ -41,11 +41,11 @@ export class LoginComponent {
     }
   }
 
-  get username(): AbstractControl<any, any> | null {
+  get username(): AbstractControl<string, string> | null {
     return this.loginForm.get('username');
   }
 
-  get password(): AbstractControl<any, any> | null {
+  get password(): AbstractControl<string, string> | null {
     return this.loginForm.get('password');
   }
 }

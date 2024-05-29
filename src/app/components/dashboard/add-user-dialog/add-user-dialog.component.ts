@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {DialogRef, DIALOG_DATA} from '@angular/cdk/dialog';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Store} from '@ngxs/store';
 import {finalize} from "rxjs";
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -20,19 +20,18 @@ export class AddUserDialogComponent {
   isLoading: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
     public dialogRef: DialogRef<string>,
     private store: Store,
     private snackBar: MatSnackBar,
     private router: Router,
     @Inject(DIALOG_DATA) public data: User
   ) {
-    this.firstFormGroup = this.fb.group({
-      firstname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      lastname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(/^\+\d{11}$/)]]
+    this.firstFormGroup = new FormGroup({
+      firstname: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
+      lastname: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
+      username: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      phone: new FormControl('', [Validators.required, Validators.pattern(/^\+\d{11}$/)])
     });
   }
 
