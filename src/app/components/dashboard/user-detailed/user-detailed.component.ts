@@ -29,20 +29,15 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // TODO use snapshot
-    this.route.params.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(params => {
-      this.userId = +params['id'];
-      this.user$ = this.store.select(UserState.userById).pipe(
-        map(selector => selector(this.userId)),
-      );
-      this.userCarts$ = this.store.select(CartState.cartsByUserId).pipe(
-        map(selector => selector(this.userId)),
-      );
-      this.products$ = this.store.select(ProductState.products).pipe(
-      );
-    });
+    this.userId = +this.route.snapshot.params['id'];
+    this.user$ = this.store.select(UserState.userById).pipe(
+      map(selector => selector(this.userId)),
+    );
+    this.userCarts$ = this.store.select(CartState.cartsByUserId).pipe(
+      map(selector => selector(this.userId)),
+    );
+    this.products$ = this.store.select(ProductState.products).pipe(
+    );
   }
 
   ngOnDestroy() {
