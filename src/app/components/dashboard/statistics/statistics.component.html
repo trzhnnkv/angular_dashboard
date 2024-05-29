@@ -4,7 +4,7 @@
         animationEnabled: true,
         theme: 'light2',
         title: { text: 'Products Purchased' },
-        data: [{ type: 'column', dataPoints: productsData }]
+        data: [{ type: 'column', dataPoints: productPurchaseRatios }]
       }"></canvasjs-chart>
   </div>
 
@@ -13,7 +13,7 @@
         animationEnabled: true,
         theme: 'light2',
         title: { text: 'User Purchases' },
-        data: [{ type: 'pie', dataPoints: usersData }]
+        data: [{ type: 'pie', dataPoints: userTotalPurchases }]
       }"></canvasjs-chart>
   </div>
 
@@ -22,7 +22,7 @@
         animationEnabled: true,
         theme: 'light2',
         title: { text: 'Active Users' },
-        data: [{ type: 'line', dataPoints: activeUsersData }]
+        data: [{ type: 'line', dataPoints: dailyActiveUsers }]
       }"></canvasjs-chart>
   </div>
 </div>

@@ -56,15 +56,13 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // TODO rename method
-  updateQuantityDecrease(cartId: number, productId: number, quantity: number) {
+  decreaseQuantity(cartId: number, productId: number, quantity: number) {
     if (quantity > 1) {
       this.store.dispatch(new UpdateProductQuantity(cartId, this.userId, productId, quantity - 1));
     }
   }
 
-  // TODO rename method
-  updateQuantityIncrease(cartId: number, productId: number, quantity: number) {
+  increaseQuantity(cartId: number, productId: number, quantity: number) {
     this.store.dispatch(new UpdateProductQuantity(cartId, this.userId, productId, quantity + 1));
   }
 
