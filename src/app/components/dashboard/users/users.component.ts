@@ -13,7 +13,6 @@ import { Product } from "../../../core/interfaces/product.model";
 import { UserState } from "../../../core/stores/users/users.state";
 import { CartState } from "../../../core/stores/carts/carts.state";
 import { ProductState } from "../../../core/stores/products/products.state";
-import { LoadUsers } from "../../../core/stores/users/users.actions";
 import { SortUsersPipe } from "../../../shared/pipes/sort-users.pipe";
 import { FilterUsersPipe } from "../../../shared/pipes/filter-users.pipe";
 
@@ -68,8 +67,6 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    this.store.dispatch(new LoadUsers());
-
     this.usersWithDetails$ = combineLatest([this.users$, this.carts$, this.products$]).pipe(
       map(([users, carts, products]) => {
         return users.map(user => {

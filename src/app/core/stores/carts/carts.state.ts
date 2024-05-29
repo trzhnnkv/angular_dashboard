@@ -4,7 +4,7 @@ import { LoadCarts, UpdateProductQuantity } from './carts.actions';
 import { Cart } from "../../interfaces/cart.model";
 import { ApiService } from "../../services/api.service";
 import { tap } from "rxjs/operators";
-import { patch, updateItem, compose } from '@ngxs/store/operators';
+import { patch, updateItem } from '@ngxs/store/operators';
 
 export interface CartStateModel {
   carts: Cart[];
