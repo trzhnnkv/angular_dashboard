@@ -3,6 +3,7 @@ body {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   padding: 20px;
   max-width: 800px;
+  height: 100vh;
   box-sizing: border-box;
   overflow-x: hidden;
 }

@@ -4,6 +4,7 @@ import {AddUser, LoadUsers} from './users.actions';
 import {User} from "../../interfaces/user.model";
 import {ApiService} from "../../services/api.service";
 import {tap} from "rxjs/operators";
+import { patch, append } from '@ngxs/store/operators';
 
 export interface UserStateModel {
   users: User[];
@@ -42,11 +43,13 @@ export class UserState {
   @Action(AddUser)
   addUser(ctx: StateContext<UserStateModel>, action: AddUser) {
     const state = ctx.getState();
-    const newUser: User = {...action.user, id: this.generateId(state.users)};
-    const updatedUsers = [...state.users, newUser];
-    // TODO Check users operators (ngxs docs)
-    ctx.patchState({users: updatedUsers});
-    return updatedUsers;
+    const newUser: User = { ...action.user, id: this.generateId(state.users) };
+
+    ctx.setState(
+      patch({
+        users: append([newUser])
+      })
+    );
   }
 
   private generateId(users: User[]): number {

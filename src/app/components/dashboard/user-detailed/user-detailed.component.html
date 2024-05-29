@@ -13,8 +13,7 @@
 
     <div class="purchases-section">
       <h4>Purchases</h4>
-      @if (userCarts$ | async; as userCarts) {
-        @for (cart of userCarts; track $index) {
+        @for (cart of userCarts$ | async; track $index) {
           <div class="cart-container">
             <h5>{{ cart.date | date: 'fullDate' }}</h5>
             <div class="cart-card">
@@ -30,9 +29,7 @@
                 </thead>
                 <tbody>
                   @for (cartProduct of cart.products; track $index) {
-<!--                    TODO you can use async pipe inside for block-->
-                    @if (products$ | async; as products) {
-                      @for (product of products; track $index) {
+                      @for (product of products$ | async; track $index) {
                         @if (product.id === cartProduct.productId) {
                           <tr>
                             <td>{{ product.title }}</td>
@@ -48,7 +45,6 @@
                         }
                       }
                     }
-                  }
                 </tbody>
               </table>
             </div>
@@ -56,7 +52,6 @@
         } @empty {
           <p>No purchases</p>
         }
-      }
     </div>
   </div>
 } @else {
