@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { LoadCarts, UpdateProductQuantity } from './carts.actions';
 import { Cart } from "../../interfaces/cart.model";
-import { ApiService} from "../../services/api.service";
+import { ApiService } from "../../services/api.service";
 import { tap } from "rxjs/operators";
+import { patch, updateItem, compose } from '@ngxs/store/operators';
 
 export interface CartStateModel {
   carts: Cart[];
@@ -40,20 +41,18 @@ export class CartState {
 
   @Action(UpdateProductQuantity)
   updateProductQuantity(ctx: StateContext<CartStateModel>, action: UpdateProductQuantity) {
-    const state = ctx.getState();
-    const carts = state.carts.map(cart => {
-      // TODO map can be change to state operators
-      if (cart.id === action.cartId && cart.userId === action.userId) {
-        cart.products = cart.products.map(product => {
-          if (product.productId === action.productId) {
-            return { ...product, quantity: action.quantity };
-          }
-          return product;
-        });
-      }
-      return cart;
-    });
-    ctx.setState({ ...state, carts });
+    ctx.setState(
+      patch({
+        carts: updateItem<Cart>(
+          cart => cart.id === action.cartId && cart.userId === action.userId,
+          patch({
+            products: updateItem(
+              product => product.productId === action.productId,
+              patch({ quantity: action.quantity })
+            )
+          })
+        )
+      })
+    );
   }
 }
-
