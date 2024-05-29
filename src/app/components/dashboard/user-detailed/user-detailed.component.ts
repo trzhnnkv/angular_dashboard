@@ -1,7 +1,7 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from "@ngxs/store";
-import {Observable, Subject} from "rxjs";
+import {Observable} from "rxjs";
 import {map} from "rxjs/operators";
 import {User} from "../../../core/interfaces/user.model";
 import {Cart} from "../../../core/interfaces/cart.model";
