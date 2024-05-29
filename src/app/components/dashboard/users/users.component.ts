@@ -88,7 +88,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.usersWithDetails$.subscribe(usersWithDetails => {
+    this.usersWithDetails$.pipe(takeUntil(this.destroy$)).subscribe(usersWithDetails => {
       this.sortedUsersWithDetails = usersWithDetails;
       this.originalUsersWithDetails = [...usersWithDetails];
     });

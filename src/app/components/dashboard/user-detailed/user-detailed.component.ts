@@ -1,8 +1,8 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from "@ngxs/store";
-import {Observable, Subscription} from "rxjs";
-import {map} from "rxjs/operators";
+import {Observable, Subject} from "rxjs";
+import {map, takeUntil} from "rxjs/operators";
 import {User} from "../../../core/interfaces/user.model";
 import {Cart} from "../../../core/interfaces/cart.model";
 import {Product} from "../../../core/interfaces/product.model";
@@ -21,7 +21,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   user$: Observable<User | undefined>;
   userCarts$: Observable<Cart[]>;
   products$: Observable<Product[]>;
-  private subscription: Subscription = new Subscription();
+  private destroy$ = new Subject<void>();
 
   constructor(private store: Store,
               private router: Router,
@@ -29,18 +29,27 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscription.add(
-      this.route.params.subscribe(params => {
-        this.userId = +params['id'];
-        this.user$ = this.store.select(UserState.userById).pipe(map(selector => selector(this.userId)));
-        this.userCarts$ = this.store.select(CartState.cartsByUserId).pipe(map(selector => selector(this.userId)));
-        this.products$ = this.store.select(ProductState.products);
-      })
-    );
+    this.route.params.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(params => {
+      this.userId = +params['id'];
+      this.user$ = this.store.select(UserState.userById).pipe(
+        map(selector => selector(this.userId)),
+        takeUntil(this.destroy$)
+      );
+      this.userCarts$ = this.store.select(CartState.cartsByUserId).pipe(
+        map(selector => selector(this.userId)),
+        takeUntil(this.destroy$)
+      );
+      this.products$ = this.store.select(ProductState.products).pipe(
+        takeUntil(this.destroy$)
+      );
+    });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   updateQuantityDecrease(cartId: number, productId: number, quantity: number) {
