@@ -65,13 +65,14 @@ export class UsersComponent implements OnInit, OnDestroy {
   loadData() {
     this.usersWithDetails$ = combineLatest([this.users$, this.carts$, this.products$]).pipe(
       map(([users, carts, products]) => {
+        const productMap = new Map(products.map(product => [product.id, product]));
+
         return users.map(user => {
           const userCarts = carts.filter(cart => cart.userId === user.id);
           const lastPurchaseDate = userCarts.length ? userCarts[userCarts.length - 1].date : 'No purchases yet';
           const totalPurchases = userCarts.reduce((acc, cart) => {
             return acc + cart.products.reduce((sum, cartProduct) => {
-              // TODO try create mapper
-              const product = products.find(p => p.id === cartProduct.productId);
+              const product = productMap.get(cartProduct.productId);
               return sum + (product ? product.price * cartProduct.quantity : 0);
             }, 0);
           }, 0);
