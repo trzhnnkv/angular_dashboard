@@ -36,17 +36,11 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       this.userId = +params['id'];
       this.user$ = this.store.select(UserState.userById).pipe(
         map(selector => selector(this.userId)),
-        //TODO can be remove, if not use subscribe
-        takeUntil(this.destroy$)
       );
       this.userCarts$ = this.store.select(CartState.cartsByUserId).pipe(
         map(selector => selector(this.userId)),
-        //TODO can be remove, if not use subscribe
-        takeUntil(this.destroy$)
       );
       this.products$ = this.store.select(ProductState.products).pipe(
-        //TODO can be remove, if not use subscribe
-        takeUntil(this.destroy$)
       );
     });
   }
